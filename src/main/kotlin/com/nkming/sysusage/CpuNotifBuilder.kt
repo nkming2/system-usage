@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
 import com.nkming.utils.Log
 import java.util.*
@@ -149,6 +150,7 @@ class CpuNotifBuilder(context: Context)
 				.setShowWhen(false)
 				.setOngoing(true)
 				.setLocalOnly(true)
+				.setColor(ContextCompat.getColor(_context, R.color.notif))
 		return product as NotificationCompat.Builder
 	}
 
