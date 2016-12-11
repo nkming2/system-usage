@@ -1,0 +1,86 @@
+<resources>
+	<string name="app_name">System Usage</string>
+	<string name="app_pref_name">System Usage</string>
+
+	<string name="sh_failed">Failed running shell command</string>
+
+	<string name="notif_loading">Gathering system stat…</string>
+
+	<string name="cpu_notif_title_overall" formatted="false">CPU: %d%%</string>
+	<string name="cpu_notif_content_overall" formatted="false">%d of %d cores enabled</string>
+	<string name="cpu_notif_title" formatted="false">Core %d: %d%%</string>
+	<string name="cpu_notif_title_disabled" formatted="false">Core %d disabled</string>
+
+	<string name="mem_notif_title" formatted="false">Memory: %d%%</string>
+	<string name="mem_notif_content" formatted="false">%d MB in use, %d MB remaining</string>
+
+	<string name="net_tx_notif_title" formatted="false">Upload: %d%%</string>
+	<string name="net_rx_notif_title" formatted="false">Download: %d%%</string>
+	<string name="net_notif_title_disabled" formatted="false">Network not available</string>
+
+	<string name="pref_file" translatable="false">com.nkming.cpuusage</string>
+	<string name="pref_cpu_notification_category">CPU Notification</string>
+	<string name="pref_mem_notification_category">Memory Notification</string>
+	<string name="pref_net_notification_category">Network Notification</string>
+	<string name="pref_misc_category">Misc</string>
+
+	<string name="pref_interval_mul_key" translatable="false">interval_mul</string>
+	<string name="pref_interval_mul_title">Update interval</string>
+
+	<string name="pref_high_priority_key" translatable="false">high_priority</string>
+	<string name="pref_high_priority_title">High priority</string>
+	<string name="pref_high_priority_summary_on">High priority notifications would show first</string>
+	<string name="pref_high_priority_summary_off">Low priority notifications would show last</string>
+
+	<string name="pref_autorun_key" translatable="false">auto_run</string>
+	<string name="pref_autorun_title">Autorun on boot</string>
+
+	<string name="pref_enable_cpu_notif_key" translatable="false">enable_cpu_notif</string>
+	<string name="pref_enable_cpu_notif_title">Enable</string>
+
+	<string name="pref_overall_cpu_key" translatable="false">overall_cpu</string>
+	<string name="pref_overall_cpu_title">Show overall stat</string>
+	<string name="pref_overall_cpu_summary_on">Showing a single combined stat</string>
+	<string name="pref_overall_cpu_summary_off">Showing multiple stats for each core</string>
+
+	<string name="pref_enable_mem_notif_key" translatable="false">enable_mem_notif</string>
+	<string name="pref_enable_mem_notif_title">Enable</string>
+
+	<string name="pref_enable_net_notif_key" translatable="false">enable_net_notif</string>
+	<string name="pref_enable_net_notif_title">Enable</string>
+
+	<string name="pref_net_mobile_template_key" translatable="false">net_mobile_template</string>
+	<string name="pref_net_mobile_template_title">Mobile network template</string>
+	<string name="pref_net_mobile_template_summary">Apply predefined settings for a mobile network. However actual capacities depend on carrier and data plan. Tweak values below to better represent yours</string>
+	<string-array name="pref_net_mobile_templates" translatable="false">
+		<item>LTE</item>
+		<item>WiMAX</item>
+		<item>HSPA+</item>
+		<item>HSPA</item>
+		<item>3G</item>
+		<item>EDGE</item>
+		<item>2G</item>
+	</string-array>
+
+	<string name="pref_net_mobile_dl_key" translatable="false">net_mobile_dl</string>
+	<string name="pref_net_mobile_dl_title">Mobile downlink capacity</string>
+
+	<string name="pref_net_mobile_ul_key" translatable="false">net_mobile_ul</string>
+	<string name="pref_net_mobile_ul_title">Mobile uplink capacity</string>
+
+	<string name="pref_net_wifi_dl_key" translatable="false">net_wifi_dl</string>
+	<string name="pref_net_wifi_dl_title">Wi-Fi downlink capacity</string>
+
+	<string name="pref_net_wifi_ul_key" translatable="false">net_wifi_ul</string>
+	<string name="pref_net_wifi_ul_title">Wi-Fi uplink capacity</string>
+
+	<string-array name="pref_net_throughput_units">
+		<item>kbit/s</item>
+		<item>Mbit/s</item>
+	</string-array>
+
+	<string name="pref_dark_theme_key" translatable="false">dark_theme</string>
+	<string name="pref_dark_theme_title">Dark theme</string>
+	<string name="pref_dark_theme_summary_on">Using dark theme</string>
+	<string name="pref_dark_theme_summary_off">Using light theme</string>
+</resources>

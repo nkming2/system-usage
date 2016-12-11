@@ -1,0 +1,13 @@
+package com.nkming.sysusage
+
+object Res
+{
+	const val ACTION_UNPLUG = "${BuildConfig.APPLICATION_ID}.ACTION_UNPLUG"
+	const val ACTION_CPU_STAT_AVAILABLE =
+			"${BuildConfig.APPLICATION_ID}.ACTION_CPU_STAT_AVAILABLE"
+	const val ACTION_MEM_STAT_AVAILABLE =
+			"${BuildConfig.APPLICATION_ID}.ACTION_MEM_STAT_AVAILABLE"
+	const val ACTION_NET_STAT_AVAILABLE =
+			"${BuildConfig.APPLICATION_ID}.ACTION_NET_STAT_AVAILABLE"
+	const val EXTRA_STAT = "${BuildConfig.APPLICATION_ID}.EXTRA_STAT"
+}

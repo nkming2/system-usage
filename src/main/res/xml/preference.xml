@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<com.nkming.utils.preference.SeekBarPreference
+		android:key="@string/pref_interval_mul_key"
+		android:title="@string/pref_interval_mul_title"
+		app:min="2"
+		app:max="20"
+		android:defaultValue="4" />
+
+	<com.nkming.utils.preference.SwitchPreferenceFix
+		android:key="@string/pref_high_priority_key"
+		android:title="@string/pref_high_priority_title"
+		android:summaryOn="@string/pref_high_priority_summary_on"
+		android:summaryOff="@string/pref_high_priority_summary_off"
+		android:defaultValue="false" />
+
+	<com.nkming.utils.preference.SwitchPreferenceFix
+		android:key="@string/pref_autorun_key"
+		android:title="@string/pref_autorun_title"
+		android:defaultValue="true" />
+
+	<PreferenceCategory android:title="@string/pref_cpu_notification_category">
+		<com.nkming.utils.preference.SwitchPreferenceFix
+			android:key="@string/pref_enable_cpu_notif_key"
+			android:title="@string/pref_enable_cpu_notif_title"
+			android:defaultValue="true" />
+
+		<com.nkming.utils.preference.SwitchPreferenceFix
+			android:key="@string/pref_overall_cpu_key"
+			android:dependency="@string/pref_enable_cpu_notif_key"
+			android:title="@string/pref_overall_cpu_title"
+			android:summaryOn="@string/pref_overall_cpu_summary_on"
+			android:summaryOff="@string/pref_overall_cpu_summary_off"
+			android:defaultValue="true" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/pref_mem_notification_category">
+		<com.nkming.utils.preference.SwitchPreferenceFix
+			android:key="@string/pref_enable_mem_notif_key"
+			android:title="@string/pref_enable_mem_notif_title"
+			android:defaultValue="true" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/pref_net_notification_category">
+		<com.nkming.utils.preference.SwitchPreferenceFix
+			android:key="@string/pref_enable_net_notif_key"
+			android:title="@string/pref_enable_net_notif_title"
+			android:defaultValue="true" />
+
+		<ListPreference
+			android:key="@string/pref_net_mobile_template_key"
+			android:dependency="@string/pref_enable_net_notif_key"
+			android:title="@string/pref_net_mobile_template_title"
+			android:summary="@string/pref_net_mobile_template_summary"
+			android:entries="@array/pref_net_mobile_templates"
+			android:entryValues="@array/pref_net_mobile_templates" />
+
+		<com.nkming.sysusage.NetThroughputPreference
+			android:key="@string/pref_net_mobile_dl_key"
+			android:dependency="@string/pref_enable_net_notif_key"
+			android:title="@string/pref_net_mobile_dl_title"
+			android:defaultValue="1000000" />
+
+		<com.nkming.sysusage.NetThroughputPreference
+			android:key="@string/pref_net_mobile_ul_key"
+			android:dependency="@string/pref_enable_net_notif_key"
+			android:title="@string/pref_net_mobile_ul_title"
+			android:defaultValue="1000000" />
+
+		<com.nkming.sysusage.NetThroughputPreference
+			android:key="@string/pref_net_wifi_dl_key"
+			android:dependency="@string/pref_enable_net_notif_key"
+			android:title="@string/pref_net_wifi_dl_title"
+			android:defaultValue="100000000" />
+
+		<com.nkming.sysusage.NetThroughputPreference
+			android:key="@string/pref_net_wifi_ul_key"
+			android:dependency="@string/pref_enable_net_notif_key"
+			android:title="@string/pref_net_wifi_ul_title"
+			android:defaultValue="100000000" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/pref_misc_category">
+		<com.nkming.utils.preference.SwitchPreferenceFix
+			android:key="@string/pref_dark_theme_key"
+			android:title="@string/pref_dark_theme_title"
+			android:summaryOn="@string/pref_dark_theme_summary_on"
+			android:summaryOff="@string/pref_dark_theme_summary_off"
+			android:defaultValue="false" />
+	</PreferenceCategory>
+</PreferenceScreen>

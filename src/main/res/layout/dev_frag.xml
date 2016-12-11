@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingLeft="16dp"
+	android:paddingRight="16dp"
+	android:paddingTop="8dp"
+	android:paddingBottom="8dp">
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		android:paddingTop="4dp"
+		android:textColor="?colorAccent"
+		android:text="Core Count" />
+
+	<TextView
+		android:id="@+id/count"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:paddingBottom="4dp" />
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		android:paddingTop="4dp"
+		android:textColor="?colorAccent"
+		android:text="Status" />
+
+	<TextView
+		android:id="@+id/status"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:paddingBottom="4dp" />
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		android:paddingTop="4dp"
+		android:textColor="?colorAccent"
+		android:text="Usage" />
+
+	<TextView
+		android:id="@+id/usage"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:paddingBottom="4dp" />
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		android:paddingTop="4dp"
+		android:textColor="?colorAccent"
+		android:text="Normalized Usage" />
+
+	<TextView
+		android:id="@+id/normalized_usage"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+		android:paddingBottom="4dp" />
+</LinearLayout>
