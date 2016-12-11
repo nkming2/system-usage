@@ -67,7 +67,7 @@ class NetNotifBuilder(context: Context)
 				throw RuntimeException(
 						"Icon not found: ic_net_ul_%d_white_24dp".format(level))
 			}
-			getNotifBuilder(when_)
+			getNotifBuilder(when_ - 1)
 					.setContentTitle(_context.getString(
 							R.string.net_tx_notif_title, level))
 					.setContentText(NetUtils.getReadableByteSpeed(stat.txBps))
