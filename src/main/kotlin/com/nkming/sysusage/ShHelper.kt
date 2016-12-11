@@ -72,7 +72,7 @@ object ShHelper
 		_isShStarting = true
 		return Shell.Builder()
 				.useSH()
-				.setWantSTDERR(true)
+				//.setWantSTDERR(true)
 				.setWatchdogTimeout(5)
 				.setMinimalLogging(true)
 				.open({commandCode, exitCode, output ->
