@@ -14,8 +14,8 @@
 	<string name="mem_notif_title" formatted="false">Memory: %d%%</string>
 	<string name="mem_notif_content" formatted="false">%d MB in use, %d MB remaining</string>
 
-	<string name="net_tx_notif_title" formatted="false">Upload: %d%%</string>
-	<string name="net_rx_notif_title" formatted="false">Download: %d%%</string>
+	<string name="net_tx_notif_title" formatted="false">Outgoing: %d%%</string>
+	<string name="net_rx_notif_title" formatted="false">Incoming: %d%%</string>
 	<string name="net_notif_title_disabled" formatted="false">Network not available</string>
 
 	<string name="pref_file" translatable="false">com.nkming.cpuusage</string>
