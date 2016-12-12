@@ -22,6 +22,12 @@
 		android:title="@string/pref_autorun_title"
 		android:defaultValue="true" />
 
+	<com.nkming.utils.preference.SwitchPreferenceFix
+		android:key="@string/pref_optimize_battery_key"
+		android:title="@string/pref_optimize_battery_title"
+		android:summary="@string/pref_optimize_battery_summary"
+		android:defaultValue="true" />
+
 	<PreferenceCategory android:title="@string/pref_cpu_notification_category">
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_enable_cpu_notif_key"

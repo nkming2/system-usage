@@ -35,6 +35,10 @@
 	<string name="pref_autorun_key" translatable="false">auto_run</string>
 	<string name="pref_autorun_title">Autorun on boot</string>
 
+	<string name="pref_optimize_battery_key" translatable="false">optimize_battery</string>
+	<string name="pref_optimize_battery_title">Optimize battery usage</string>
+	<string name="pref_optimize_battery_summary">Halting app when device screen is off. Recommended to keep enabled unless weird things happen</string>
+
 	<string name="pref_enable_cpu_notif_key" translatable="false">enable_cpu_notif</string>
 	<string name="pref_enable_cpu_notif_title">Enable</string>
 

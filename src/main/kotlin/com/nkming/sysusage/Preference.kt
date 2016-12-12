@@ -62,6 +62,16 @@ class Preference(context: Context, pref: SharedPreferences)
 			_edit.putBoolean(_autorunKey, v)
 		}
 
+	var isOptimizeBattery: Boolean
+		get()
+		{
+			return _pref.getBoolean(_optimizeBatteryKey, true)
+		}
+		set(v)
+		{
+			_edit.putBoolean(_optimizeBatteryKey, v)
+		}
+
 	var isEnableCpu: Boolean
 		get()
 		{
@@ -158,6 +168,8 @@ class Preference(context: Context, pref: SharedPreferences)
 			R.string.pref_high_priority_key)}
 	private val _autorunKey by lazy{_context.getString(
 			R.string.pref_autorun_key)}
+	private val _optimizeBatteryKey by lazy{_context.getString(
+			R.string.pref_optimize_battery_key)}
 
 	private val _enableCpuNotifKey by lazy{_context.getString(
 			R.string.pref_enable_cpu_notif_key)}
