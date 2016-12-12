@@ -65,7 +65,8 @@ object NetUtils
 	}
 
 	/**
-	 * Return throughput for various mobile network type
+	 * Return throughput for various mobile network type. These figures are
+	 * pretty random BTW :)
 	 *
 	 * @param type
 	 * @return Downlink and uplink throughput of said network, in bit/s. null if
@@ -75,13 +76,13 @@ object NetUtils
 	{
 		return when (type.toUpperCase())
 		{
-			"LTE" -> Pair(100L * 1000000L, 50L * 1000000L)
-			"WIMAX" -> Pair(128L * 1000000L, 56L * 1000000L)
-			"HSPA+" -> Pair(168L * 1000000L, 22L * 1000000L)
-			"HSPA" -> Pair(14400L * 1000L, 5760L * 1000L)
-			"3G" -> Pair(4900L * 1000L, 1800L * 1000L)
-			"EDGE" -> Pair(473600L, 473600L)
-			"2G" -> Pair(64200L, 42800L)
+			"LTE" -> Pair(15L * 1000000L, 5L * 1000000L)
+			"WIMAX" -> Pair(10L * 1000000L, 2L * 1000000L)
+			"HSPA+" -> Pair(10L * 1000000L, 2L * 1000000L)
+			"HSPA" -> Pair(7200L * 1000L, 1500L * 1000L)
+			"3G" -> Pair(500L * 1000L, 500L * 1000L)
+			"EDGE" -> Pair(384L * 1000L, 384L * 1000L)
+			"2G" -> Pair(172L * 1000L, 172L * 1000L)
 			else -> throw IllegalArgumentException("Unknown network type: $type")
 		}
 	}
