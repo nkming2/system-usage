@@ -3,7 +3,6 @@ package com.nkming.sysusage
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.TrafficStats
-import android.os.Handler
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -52,41 +51,10 @@ data class NetStat(
 class NetStatProvider(context: Context,
 		onStatUpdate: ((stat: NetStat) -> Unit)? = null,
 		onFailure: (() -> Unit)? = null)
+		: BaseStatProvider()
 {
-	fun init(interval: Long)
-	{
-		stop()
-		this.interval = interval
-		_onUpdate = object: Runnable
-		{
-			override fun run()
-			{
-				onUpdate()
-				_handler.postDelayed(this, this@NetStatProvider.interval)
-			}
-		}
-	}
-
-	fun start()
-	{
-		_onUpdate ?: return
-		if (!_isStarted)
-		{
-			_handler.post(_onUpdate)
-			_isStarted = true
-		}
-	}
-
-	fun stop()
-	{
-		_onUpdate ?: return
-		_handler.removeCallbacks(_onUpdate)
-		_isStarted = false
-	}
-
 	var onStatUpdate = onStatUpdate
 	var onFailure = onFailure
-	var interval: Long = 2000
 
 	// Throughput is in bit/s
 	var mobileRxThroughput = 0L
@@ -94,7 +62,7 @@ class NetStatProvider(context: Context,
 	var wifiRxThroughput = 0L
 	var wifiTxThroughput = 0L
 
-	private fun onUpdate()
+	protected override fun onUpdate()
 	{
 		val now = System.currentTimeMillis()
 		val tx = TrafficStats.getTotalTxBytes()
@@ -156,12 +124,9 @@ class NetStatProvider(context: Context,
 			}
 		}
 
-	private val _handler = Handler()
 	private val _context = context
 	private val _connectivityManager by lazy{_context.getSystemService(
 			Context.CONNECTIVITY_SERVICE) as ConnectivityManager}
-	private var _onUpdate: Runnable? = null
-	private var _isStarted = false
 
 	private var _isFirstRun = true
 	private var _prevTime = 0L

@@ -1,7 +1,6 @@
 package com.nkming.sysusage
 
 import android.content.Context
-import android.os.Handler
 import android.os.Parcel
 import android.os.Parcelable
 import com.nkming.utils.type.ext.sumByLong
@@ -87,6 +86,7 @@ data class CpuStat(
 class CpuStatProvider(context: Context,
 		onStatUpdate: ((stat: CpuStat) -> Unit)? = null,
 		onFailure: ((msg: String) -> Unit)? = null)
+		: BaseStatProvider()
 {
 	companion object
 	{
@@ -115,43 +115,10 @@ class CpuStatProvider(context: Context,
 				"echo \":)\"")
 	}
 
-	fun init(interval: Long)
-	{
-		stop()
-		this.interval = interval
-		_onUpdate = object: Runnable
-		{
-			override fun run()
-			{
-				onUpdate()
-				_handler.postDelayed(this, this@CpuStatProvider.interval)
-			}
-		}
-	}
-
-	fun start()
-	{
-		_onUpdate ?: return
-		if (!_isStarted)
-		{
-			_handler.post(_onUpdate)
-			_isStarted = true
-		}
-	}
-
-	fun stop()
-	{
-		_onUpdate ?: return
-		_handler.removeCallbacks(_onUpdate)
-		_isStarted = false
-		_isReady = false
-	}
-
 	var onStatUpdate = onStatUpdate
 	var onFailure = onFailure
-	var interval: Long = 2000
 
-	private fun onUpdate()
+	protected override fun onUpdate()
 	{
 		ShHelper.doShCommand(_context, UPDATE_SCRIPT,
 				successWhere = {exitCode, output -> (exitCode == 0
@@ -159,6 +126,11 @@ class CpuStatProvider(context: Context,
 				onSuccess = {exitCode, output -> onCommandOutput(output)},
 				onFailure = {exitCode, output -> onFailure?.invoke(
 						output.joinToString("\n"))})
+	}
+
+	protected override fun onStop()
+	{
+		_isReady = false
 	}
 
 	private fun onCommandOutput(output: List<String>)
@@ -378,11 +350,8 @@ class CpuStatProvider(context: Context,
 		return factor
 	}
 
-	private val _handler = Handler()
 	private val _context: Context = context
-	private var _onUpdate: Runnable? = null
 	private var _isReady = false
-	private var _isStarted = false
 	private var _prevStats: Array<LongArray>? = null
 	private var _prevUsages: DoubleArray? = null
 	private var _prevTimeStates: Array<Array<Pair<Long, Long>>?>? = null

@@ -1,6 +1,5 @@
 package com.nkming.sysusage
 
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,7 +7,7 @@ import android.support.v4.content.LocalBroadcastManager
 import com.nkming.utils.Log
 import java.util.*
 
-class CpuStatService : Service()
+class CpuStatService : BaseStatService()
 {
 	companion object
 	{
@@ -34,8 +33,6 @@ class CpuStatService : Service()
 		private const val FAILURE_THRESHOLD = 5
 	}
 
-	override fun onBind(intent: Intent?) = null
-
 	override fun onCreate()
 	{
 		super.onCreate()
@@ -50,38 +47,6 @@ class CpuStatService : Service()
 					}
 				}}
 		_statProvider.init(_pref.intervalMul * INTERVAL_BASE)
-	}
-
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
-	{
-		Log.d(LOG_TAG, "onStartCommand()")
-		if (intent == null)
-		{
-			// We are not supposed to receive null here
-			stopSelf()
-			return START_NOT_STICKY
-		}
-
-		if (intent.action == Res.ACTION_UNPLUG)
-		{
-			if (--_plugCount <= 0)
-			{
-				stopSelf()
-			}
-		}
-		else
-		{
-			_statProvider.start()
-			++_plugCount
-		}
-		return START_NOT_STICKY
-	}
-
-	override fun onDestroy()
-	{
-		super.onDestroy()
-		Log.d(LOG_TAG, "onDestroy()")
-		_statProvider.stop()
 	}
 
 	private fun createCpuStatProvider(): CpuStatProvider
@@ -128,8 +93,8 @@ class CpuStatService : Service()
 		return CpuStat(cores.map{it.immutable()})
 	}
 
-	private var _plugCount = 0
-	private val _statProvider by lazy{createCpuStatProvider()}
+	protected override val _statProvider by lazy{createCpuStatProvider()}
+
 	private var _failureCount = 0
 	private val _broadcastManager by lazy{LocalBroadcastManager.getInstance(this)}
 	private val _pref by lazy{Preference.from(this)}
