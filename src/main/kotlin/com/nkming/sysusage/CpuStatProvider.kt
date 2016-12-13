@@ -3,6 +3,7 @@ package com.nkming.sysusage
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import com.nkming.utils.Log
 import com.nkming.utils.type.ext.sumByLong
 import java.util.*
 
@@ -306,6 +307,12 @@ class CpuStatProvider(context: Context,
 			{
 				// Core is off?
 				//Log.v("$LOG_TAG.normalizeCpuUsages", "Failed while toInt()", e)
+			}
+			catch (e: Exception)
+			{
+				// #1, not sure why, but at least stop it from crashing first
+				Log.e("$LOG_TAG.normalizeCpuUsages",
+						timeStates[i].joinToString("\n"), e)
 			}
 		}
 		return products.toList()
