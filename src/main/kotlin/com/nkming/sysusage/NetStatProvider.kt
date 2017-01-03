@@ -87,8 +87,8 @@ class NetStatProvider(context: Context,
 					val txUsage = if (throughputs.second > 0)
 									(txBps * 8.0) / throughputs.second
 							else 0.0
-					NetStat(true, Math.round(txBps).toLong(), txUsage,
-							Math.round(rxBps).toLong(), rxUsage)
+					NetStat(true, Math.round(txBps), txUsage, Math.round(rxBps),
+							rxUsage)
 				}
 				onStatUpdate?.invoke(stat)
 			}
