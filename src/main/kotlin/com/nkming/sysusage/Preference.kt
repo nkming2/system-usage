@@ -115,7 +115,7 @@ class Preference(context: Context, pref: SharedPreferences)
 	var netMobileDl: Long
 		get()
 		{
-			return _pref.getLong(_netMobileDlKey, 0L)
+			return _pref.getLong(_netMobileDlKey, 1000000L)
 		}
 		set(v)
 		{
@@ -125,7 +125,7 @@ class Preference(context: Context, pref: SharedPreferences)
 	var netMobileUl: Long
 		get()
 		{
-			return _pref.getLong(_netMobileUlKey, 0L)
+			return _pref.getLong(_netMobileUlKey, 1000000L)
 		}
 		set(v)
 		{
@@ -135,7 +135,7 @@ class Preference(context: Context, pref: SharedPreferences)
 	var netWifiDl: Long
 		get()
 		{
-			return _pref.getLong(_netWifiDlKey, 0L)
+			return _pref.getLong(_netWifiDlKey, 100000000L)
 		}
 		set(v)
 		{
@@ -145,7 +145,7 @@ class Preference(context: Context, pref: SharedPreferences)
 	var netWifiUl: Long
 		get()
 		{
-			return _pref.getLong(_netWifiUlKey, 0L)
+			return _pref.getLong(_netWifiUlKey, 100000000L)
 		}
 		set(v)
 		{
