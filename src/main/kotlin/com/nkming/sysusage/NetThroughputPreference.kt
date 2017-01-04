@@ -159,7 +159,7 @@ class NetThroughputPreference : DialogPreference
 
 	private fun valueToUnit(v: Long): Int
 	{
-		if (v > 1000000)
+		if (v >= 1000000)
 		{
 			return 1
 		}
