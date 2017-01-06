@@ -152,6 +152,36 @@ class Preference(context: Context, pref: SharedPreferences)
 			_edit.putLong(_netWifiUlKey, v)
 		}
 
+	var isEnableDisk: Boolean
+		get()
+		{
+			return _pref.getBoolean(_enableDiskNotifKey, true)
+		}
+		set(v)
+		{
+			_edit.putBoolean(_enableDiskNotifKey, v)
+		}
+
+	var diskRead: Long
+		get()
+		{
+			return _pref.getLong(_diskReadKey, 20971520L)
+		}
+		set(v)
+		{
+			_edit.putLong(_diskReadKey, v)
+		}
+
+	var diskWrite: Long
+		get()
+		{
+			return _pref.getLong(_diskWriteKey, 10485760L)
+		}
+		set(v)
+		{
+			_edit.putLong(_diskWriteKey, v)
+		}
+
 	var isDarkTheme: Boolean
 		get()
 		{
@@ -189,6 +219,13 @@ class Preference(context: Context, pref: SharedPreferences)
 			R.string.pref_net_wifi_dl_key)}
 	private val _netWifiUlKey by lazy{_context.getString(
 			R.string.pref_net_wifi_ul_key)}
+
+	private val _enableDiskNotifKey by lazy{_context.getString(
+			R.string.pref_enable_disk_notif_key)}
+	private val _diskReadKey by lazy{_context.getString(
+			R.string.pref_disk_read_key)}
+	private val _diskWriteKey by lazy{_context.getString(
+			R.string.pref_disk_write_key)}
 
 	private val _darkThemeKey by lazy{_context.getString(
 			R.string.pref_dark_theme_key)}

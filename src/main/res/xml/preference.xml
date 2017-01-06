@@ -89,6 +89,25 @@
 			android:defaultValue="100000000" />
 	</PreferenceCategory>
 
+	<PreferenceCategory android:title="@string/pref_disk_notification_category">
+		<com.nkming.utils.preference.SwitchPreferenceFix
+			android:key="@string/pref_enable_disk_notif_key"
+			android:title="@string/pref_enable_disk_notif_title"
+			android:defaultValue="true" />
+
+		<com.nkming.sysusage.DiskThroughputPreference
+			android:key="@string/pref_disk_read_key"
+			android:dependency="@string/pref_enable_disk_notif_key"
+			android:title="@string/pref_disk_read_title"
+			android:defaultValue="20971520" />
+
+		<com.nkming.sysusage.DiskThroughputPreference
+			android:key="@string/pref_disk_write_key"
+			android:dependency="@string/pref_enable_disk_notif_key"
+			android:title="@string/pref_disk_write_title"
+			android:defaultValue="10485760" />
+	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/pref_misc_category">
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_dark_theme_key"

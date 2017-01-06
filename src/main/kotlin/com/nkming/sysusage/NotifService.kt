@@ -34,6 +34,8 @@ class NotifService : Service(),
 				IntentFilter(Res.ACTION_MEM_STAT_AVAILABLE))
 		_broadcastManager.registerReceiver(_netStatAvailableReceiver,
 				IntentFilter(Res.ACTION_NET_STAT_AVAILABLE))
+		_broadcastManager.registerReceiver(_diskStatAvailableReceiver,
+				IntentFilter(Res.ACTION_DISK_STAT_AVAILABLE))
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
@@ -56,6 +58,10 @@ class NotifService : Service(),
 			if (_pref.isEnableNet)
 			{
 				enableNet()
+			}
+			if (_pref.isEnableDisk)
+			{
+				enableDisk()
 			}
 
 			stopIfDisabled()
@@ -84,6 +90,10 @@ class NotifService : Service(),
 		if (_isEnableNet)
 		{
 			NetStatService.unplug(this)
+		}
+		if (_isEnableDisk)
+		{
+			DiskStatService.unplug(this)
 		}
 
 		_pref.onSharedPreferenceChangeListener = null
@@ -124,6 +134,17 @@ class NotifService : Service(),
 				disableNet()
 			}
 		}
+		else if (key == getString(R.string.pref_enable_disk_notif_key))
+		{
+			if (pref.getBoolean(key, true))
+			{
+				enableDisk()
+			}
+			else
+			{
+				disableDisk()
+			}
+		}
 		else if (key == getString(R.string.pref_overall_cpu_key))
 		{
 			_cpuNotifBuilder.isOverall = pref.getBoolean(key, true)
@@ -157,11 +178,18 @@ class NotifService : Service(),
 		postStatAvailable()
 	}
 
+	private fun onStatAvailable(stat: DiskStat)
+	{
+		_diskStat = stat
+		postStatAvailable()
+	}
+
 	private fun postStatAvailable()
 	{
 		if ((!_isEnableCpu || _cpuStat != null)
 				&& (!_isEnableMem || _memStat != null)
-				&& (!_isEnableNet || _netStat != null))
+				&& (!_isEnableNet || _netStat != null)
+				&& (!_isEnableDisk || _diskStat != null))
 		{
 			val notifs = arrayListOf<Notification>()
 			if (_isEnableCpu)
@@ -181,6 +209,13 @@ class NotifService : Service(),
 				val netNotifs = _netNotifBuilder.build(_netStat!!, _when - 2000)
 				notifs += netNotifs
 				_netStat = null
+			}
+			if (_isEnableDisk)
+			{
+				val diskNotifs = _diskNotifBuilder.build(_diskStat!!,
+						_when - 3000)
+				notifs += diskNotifs
+				_diskStat = null
 			}
 
 			for ((i, n) in notifs.withIndex())
@@ -263,9 +298,30 @@ class NotifService : Service(),
 		}
 	}
 
+	private fun enableDisk()
+	{
+		Log.d(LOG_TAG, "enableDisk()")
+		if (!_isEnableDisk)
+		{
+			_isEnableDisk = true
+			DiskStatService.plug(this)
+		}
+	}
+
+	private fun disableDisk()
+	{
+		Log.d(LOG_TAG, "disableDisk()")
+		if (_isEnableDisk)
+		{
+			DiskStatService.unplug(this)
+			_isEnableDisk = false
+			stopIfDisabled()
+		}
+	}
+
 	private fun stopIfDisabled()
 	{
-		if (!_isEnableCpu && !_isEnableMem && !_isEnableNet)
+		if (!_isEnableCpu && !_isEnableMem && !_isEnableNet && !_isEnableDisk)
 		{
 			Log.d("$LOG_TAG.stopIfDisabled", "Stopping service...")
 			stopSelf()
@@ -313,6 +369,15 @@ class NotifService : Service(),
 		}
 	}
 
+	private val _diskStatAvailableReceiver = object: BroadcastReceiver()
+	{
+		override fun onReceive(context: Context, intent: Intent)
+		{
+			val stat = intent.getParcelableExtra<DiskStat>(Res.EXTRA_STAT)
+			onStatAvailable(stat)
+		}
+	}
+
 	private val _priority: Int
 		get()
 		{
@@ -353,6 +418,15 @@ class NotifService : Service(),
 	private val _netNotifBuilder by lazy(
 	{
 		val product = NetNotifBuilder(this)
+		product.priority = _priority
+		product
+	})
+
+	private var _isEnableDisk = false
+	private var _diskStat: DiskStat? = null
+	private val _diskNotifBuilder by lazy(
+	{
+		val product = DiskNotifBuilder(this)
 		product.priority = _priority
 		product
 	})

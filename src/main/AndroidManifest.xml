@@ -35,6 +35,10 @@
 			android:exported="false" />
 
 		<service
+			android:name=".DiskStatService"
+			android:exported="false" />
+
+		<service
 			android:name=".NotifService"
 			android:exported="false" />
 

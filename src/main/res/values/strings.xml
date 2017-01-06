@@ -18,10 +18,14 @@
 	<string name="net_rx_notif_title" formatted="false">Incoming: %d%%</string>
 	<string name="net_notif_title_disabled" formatted="false">Network not available</string>
 
+	<string name="disk_read_notif_title" formatted="false">Disk read: %d%%</string>
+	<string name="disk_write_notif_title" formatted="false">Disk write: %d%%</string>
+
 	<string name="pref_file" translatable="false">com.nkming.cpuusage</string>
 	<string name="pref_cpu_notification_category">CPU Notification</string>
 	<string name="pref_mem_notification_category">Memory Notification</string>
 	<string name="pref_net_notification_category">Network Notification</string>
+	<string name="pref_disk_notification_category">Disk I/O Notification</string>
 	<string name="pref_misc_category">Misc</string>
 
 	<string name="pref_interval_mul_key" translatable="false">interval_mul</string>
@@ -81,6 +85,20 @@
 	<string-array name="pref_net_throughput_units">
 		<item>kbit/s</item>
 		<item>Mbit/s</item>
+	</string-array>
+
+	<string name="pref_enable_disk_notif_key" translatable="false">enable_disk_notif</string>
+	<string name="pref_enable_disk_notif_title">Enable</string>
+
+	<string name="pref_disk_read_key" translatable="false">disk_read</string>
+	<string name="pref_disk_read_title">Disk read capacity</string>
+
+	<string name="pref_disk_write_key" translatable="false">disk_write</string>
+	<string name="pref_disk_write_title">Disk write capacity</string>
+
+	<string-array name="pref_disk_throughput_units">
+		<item>KByte/s</item>
+		<item>MByte/s</item>
 	</string-array>
 
 	<string name="pref_dark_theme_key" translatable="false">dark_theme</string>
