@@ -30,7 +30,8 @@ class SystemUsageApp : Application()
 	private fun startServiceIfNeeded()
 	{
 		val pref = Preference.from(this)
-		if (pref.isEnableCpu || pref.isEnableMem)
+		if (pref.isEnableCpu || pref.isEnableMem || pref.isEnableNet
+				|| pref.isEnableDisk)
 		{
 			NotifService.start(this)
 		}
