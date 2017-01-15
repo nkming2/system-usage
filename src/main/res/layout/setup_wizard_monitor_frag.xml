@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/next"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="@dimen/setup_wizard_next_margin_top"
+		android:layout_marginBottom="@dimen/setup_wizard_next_margin_bottom"
+		android:src="@drawable/ic_arrow_forward_white_24dp" />
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_above="@id/next">
+
+		<View
+			android:id="@+id/title_area"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/setup_wizard_title_height"
+			android:background="?colorPrimary" />
+
+		<TextView
+			android:id="@+id/title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignBottom="@id/title_area"
+			android:padding="16dp"
+			android:background="@drawable/setup_wizard_title_text_bg"
+			android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+			android:textColor="@color/md_white_1000"
+			android:text="@string/setup_wizard_monitor_message" />
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_below="@id/title_area">
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<android.support.v7.widget.SwitchCompat
+					android:id="@+id/cpu_switch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="32dp"
+					app:switchPadding="16dp"
+					android:checked="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+					android:text="@string/setup_wizard_monitor_cpu_switch" />
+
+				<android.support.v7.widget.SwitchCompat
+					android:id="@+id/mem_switch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/cpu_switch"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="16dp"
+					app:switchPadding="16dp"
+					android:checked="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+					android:text="@string/setup_wizard_monitor_mem_switch" />
+
+				<android.support.v7.widget.SwitchCompat
+					android:id="@+id/net_switch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/mem_switch"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="16dp"
+					app:switchPadding="16dp"
+					android:checked="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+					android:text="@string/setup_wizard_monitor_net_switch" />
+
+				<android.support.v7.widget.SwitchCompat
+					android:id="@+id/disk_switch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/net_switch"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="16dp"
+					app:switchPadding="16dp"
+					android:checked="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+					android:text="@string/setup_wizard_monitor_disk_switch" />
+			</RelativeLayout>
+		</ScrollView>
+	</RelativeLayout>
+</RelativeLayout>

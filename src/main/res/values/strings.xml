@@ -21,8 +21,33 @@
 	<string name="disk_read_notif_title" formatted="false">Disk read: %d%%</string>
 	<string name="disk_write_notif_title" formatted="false">Disk write: %d%%</string>
 
+	<string name="setup_wizard_greeting_message">Nice to meet you &#x263a;</string>
+	<string name="setup_wizard_greeting_detail_message">We\'ll help you to configure this app to your needs</string>
+	<string name="setup_wizard_greeting_theme_switch">Dark theme</string>
+
+	<string name="setup_wizard_monitor_message">Select metrics</string>
+	<string name="setup_wizard_monitor_cpu_switch">CPU</string>
+	<string name="setup_wizard_monitor_mem_switch">Memory</string>
+	<string name="setup_wizard_monitor_net_switch">Network</string>
+	<string name="setup_wizard_monitor_disk_switch">Disk</string>
+
+	<string name="setup_wizard_net_mobile_message">Tailor to your data network</string>
+	<string name="setup_wizard_net_mobile_detail_message">To get an accurate usage figure, select and tweak the value to best describe your mobile data network capacity</string>
+	<string name="setup_wizard_net_wifi_message">Tailor to your WiFi network</string>
+	<string name="setup_wizard_net_wifi_detail_message">To get an accurate usage figure, tweak the value to best describe your WiFi network capacity</string>
+	<string name="setup_wizard_net_dl_label">Incoming</string>
+	<string name="setup_wizard_net_ul_label">Outgoing</string>
+
+	<string name="setup_wizard_disk_message">Tailor to your storage</string>
+	<string name="setup_wizard_disk_detail_message">To get an accurate usage figure, tweak the value to best describe your storage read/write capacity</string>
+	<string name="setup_wizard_disk_read_label">Read</string>
+	<string name="setup_wizard_disk_write_label">Write</string>
+
+	<string name="setup_wizard_done_message">Done!</string>
+
 	<string name="pref_file" translatable="false">com.nkming.cpuusage</string>
 
+	<string name="pref_run_setup_wizard_key">run_setup_wizard</string>
 	<string name="pref_last_version_key">last_version</string>
 
 	<string name="pref_cpu_notification_category">CPU Notification</string>

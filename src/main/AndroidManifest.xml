@@ -22,6 +22,16 @@
 			</intent-filter>
 		</activity>
 
+		<activity
+			android:name=".SetupWizardActivity"
+			android:label="@string/app_pref_name"
+			android:windowSoftInputMode="adjustPan">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+
 		<service
 			android:name=".CpuStatService"
 			android:exported="false" />

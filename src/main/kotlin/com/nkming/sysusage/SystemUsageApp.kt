@@ -56,6 +56,10 @@ class SystemUsageApp : Application()
 
 	private fun startServiceIfNeeded(pref: Preference)
 	{
+		if (!pref.hasRunSetupWizard)
+		{
+			return
+		}
 		if (pref.isEnableCpu || pref.isEnableMem || pref.isEnableNet
 				|| pref.isEnableDisk)
 		{

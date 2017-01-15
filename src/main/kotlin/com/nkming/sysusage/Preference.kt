@@ -57,6 +57,16 @@ class Preference(context: Context, pref: SharedPreferences)
 			}
 		}
 
+	var hasRunSetupWizard: Boolean
+		get()
+		{
+			return _pref.getBoolean(_runSetupWizardKey, false)
+		}
+		set(v)
+		{
+			_edit.putBoolean(_runSetupWizardKey, v)
+		}
+
 	var lastVersion: Int
 		get()
 		{
@@ -147,6 +157,16 @@ class Preference(context: Context, pref: SharedPreferences)
 			_edit.putBoolean(_enableNetNotifKey, v)
 		}
 
+	var netMobileTemplate: String
+		get()
+		{
+			return _pref.getString(_netMobileTemplateKey, "LTE")
+		}
+		set(v)
+		{
+			_edit.putString(_netMobileTemplateKey, v)
+		}
+
 	var netMobileDl: Long
 		get()
 		{
@@ -227,6 +247,8 @@ class Preference(context: Context, pref: SharedPreferences)
 			_edit.putBoolean(_darkThemeKey, v)
 		}
 
+	private val _runSetupWizardKey by lazy{_context.getString(
+			R.string.pref_run_setup_wizard_key)}
 	private val _lastVersionKey by lazy{_context.getString(
 			R.string.pref_last_version_key)}
 
@@ -249,6 +271,8 @@ class Preference(context: Context, pref: SharedPreferences)
 
 	private val _enableNetNotifKey by lazy{_context.getString(
 			R.string.pref_enable_net_notif_key)}
+	private val _netMobileTemplateKey by lazy{_context.getString(
+			R.string.pref_net_mobile_template_key)}
 	private val _netMobileDlKey by lazy{_context.getString(
 			R.string.pref_net_mobile_dl_key)}
 	private val _netMobileUlKey by lazy{_context.getString(

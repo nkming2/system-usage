@@ -2,6 +2,10 @@ package com.nkming.sysusage
 
 object Res
 {
+	const val ANIMATION_FAST = 200L
+	const val ANIMATION_MID = 400L
+	const val ANIMATION_SLOW = 500L
+
 	const val ACTION_UNPLUG = "${BuildConfig.APPLICATION_ID}.ACTION_UNPLUG"
 	const val ACTION_CPU_STAT_AVAILABLE =
 			"${BuildConfig.APPLICATION_ID}.ACTION_CPU_STAT_AVAILABLE"

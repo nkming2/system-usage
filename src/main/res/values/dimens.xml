@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="setup_wizard_title_height">144dp</dimen>
+	<dimen name="setup_wizard_next_margin_top">16dp</dimen>
+	<dimen name="setup_wizard_next_margin_bottom">24dp</dimen>
+</resources>

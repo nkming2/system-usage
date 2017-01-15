@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/next"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="@dimen/setup_wizard_next_margin_top"
+		android:layout_marginBottom="@dimen/setup_wizard_next_margin_bottom"
+		android:src="@drawable/ic_arrow_forward_white_24dp" />
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_above="@id/next">
+
+		<View
+			android:id="@+id/title_area"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/setup_wizard_title_height"
+			android:background="?colorPrimary" />
+
+		<TextView
+			android:id="@+id/title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignBottom="@id/title_area"
+			android:padding="16dp"
+			android:background="@drawable/setup_wizard_title_text_bg"
+			android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+			android:textColor="@color/md_white_1000"
+			android:text="@string/app_name" />
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_below="@id/title_area">
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<TextView
+					android:id="@+id/message"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="16dp"
+					android:layout_marginRight="16dp"
+					android:layout_marginTop="40dp"
+					android:layout_centerHorizontal="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+					android:gravity="center_horizontal"
+					android:text="@string/setup_wizard_greeting_message" />
+
+				<TextView
+					android:id="@+id/detail_message"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/message"
+					android:layout_marginLeft="16dp"
+					android:layout_marginRight="16dp"
+					android:layout_marginTop="16dp"
+					android:layout_centerHorizontal="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+					android:gravity="center_horizontal"
+					android:text="@string/setup_wizard_greeting_detail_message" />
+
+				<android.support.v7.widget.SwitchCompat
+					android:id="@+id/theme_switch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/detail_message"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="48dp"
+					app:switchPadding="16dp"
+					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+					android:text="@string/setup_wizard_greeting_theme_switch" />
+			</RelativeLayout>
+		</ScrollView>
+	</RelativeLayout>
+</RelativeLayout>
