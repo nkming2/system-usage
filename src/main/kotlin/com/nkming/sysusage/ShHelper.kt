@@ -1,7 +1,6 @@
 package com.nkming.sysusage
 
 import android.content.Context
-import android.os.Handler
 import android.widget.Toast
 import com.nkming.utils.Log
 import eu.chainfire.libsuperuser.Shell
@@ -24,75 +23,73 @@ object ShHelper
 			onSuccess: ((exitCode: Int, output: List<String>) -> Unit)? = null,
 			onFailure: ((exitCode: Int, output: List<String>) -> Unit)? = null)
 	{
-		// FIXME Will cause dead loop
-		if (!_sh.isRunning)
-		{
-			_handler.postDelayed({_doShCommand(scripts, successWhere, onSuccess,
-					onFailure)}, 200)
-		}
-		else
-		{
-			__doShCommand(scripts, successWhere, onSuccess, onFailure)
-		}
-	}
-
-	private fun __doShCommand(scripts: List<String>,
-			successWhere: ((exitCode: Int, output: List<String>) -> Boolean) = {
-					exitCode, output -> exitCode >= 0},
-			onSuccess: ((exitCode: Int, output: List<String>) -> Unit)? = null,
-			onFailure: ((exitCode: Int, output: List<String>) -> Unit)? = null)
-	{
-		_sh.addCommand(scripts, 0, {commandCode, exitCode, output ->
-		run{
-			if (exitCode == Shell.OnCommandResultListener.WATCHDOG_EXIT)
-			{
-				Log.e("$LOG_TAG.__doSuCommand", "Watchdog exception")
-				_sh.kill()
-				// TODO Limit retry count
-				_sh = buildShSession()
-				_handler.postDelayed({_doShCommand(scripts, successWhere,
-						onSuccess, onFailure)}, 200)
-			}
-			else if (!successWhere(exitCode, output))
-			{
-				Log.e("$LOG_TAG.__doSuCommand",
-						"Failed($exitCode) executing\nCommand: ${scripts.joinToString("\n")}\nOutput: ${output.joinToString("\n")}")
-				onFailure?.invoke(exitCode, output)
-			}
-			else
-			{
-				onSuccess?.invoke(exitCode, output)
-			}
-		}})
-	}
-
-	private fun buildShSession(): Shell.Interactive
-	{
-		Log.d(LOG_TAG, "buildShSession()")
-		_isShStarting = true
-		return Shell.Builder()
-				.useSH()
-				//.setWantSTDERR(true)
-				.setWatchdogTimeout(5)
-				.setMinimalLogging(true)
-				.open({commandCode, exitCode, output ->
+		requestShSession(onFailure).addCommand(scripts, 0,
+				{commandCode, exitCode, output ->
 				run{
-					// FIXME not being called?
-					Log.d("$LOG_TAG.buildShSession",
-							"Shell start status: $exitCode")
-					if (exitCode
-							!= Shell.OnCommandResultListener.SHELL_RUNNING)
+					val output_ = output ?: listOf()
+					if (exitCode == Shell.OnCommandResultListener.WATCHDOG_EXIT)
 					{
-						Log.e("$LOG_TAG.buildShSession",
-								"Failed opening shell (exitCode: $exitCode)")
-						if (_appContext != null)
-						{
-							Toast.makeText(_appContext, R.string.sh_failed,
-									Toast.LENGTH_LONG).show()
-						}
+						Log.e("$LOG_TAG._doShCommand", "Watchdog exception")
+						// Script deadlock?
+						_sh?.kill()
+						onFailure?.invoke(exitCode, output_)
 					}
-					_isShStarting = false
+					else if (!successWhere(exitCode, output_))
+					{
+						Log.e("$LOG_TAG._doShCommand",
+								"Failed($exitCode) executing\nCommand: ${scripts.joinToString("\n")}\nOutput: ${output_.joinToString("\n")}")
+						onFailure?.invoke(exitCode, output_)
+					}
+					else
+					{
+						onSuccess?.invoke(exitCode, output_)
+					}
 				}})
+	}
+
+	private fun requestShSession(
+			onFailure: ((exitCode: Int, output: List<String>) -> Unit)? = null)
+			: Shell.Interactive
+	{
+		synchronized(this)
+		{
+			Log.d(LOG_TAG, "requestShSession()")
+			if (_isShStarting || (_sh?.isRunning ?: false))
+			{
+				return _sh!!
+			}
+
+			_isShStarting = true
+			val sh = Shell.Builder()
+					.useSH()
+					//.setWantSTDERR(true)
+					.setWatchdogTimeout(5)
+					.setMinimalLogging(true)
+					.open({commandCode, exitCode, output ->
+					run{
+						Log.d("$LOG_TAG.buildShSession",
+								"Shell start status: $exitCode")
+						if (exitCode
+								!= Shell.OnCommandResultListener.SHELL_RUNNING)
+						{
+							Log.e("$LOG_TAG.buildShSession",
+									"Failed opening shell (exitCode: $exitCode)")
+							if (_appContext != null)
+							{
+								Toast.makeText(_appContext, R.string.sh_failed,
+										Toast.LENGTH_LONG).show()
+							}
+							onFailure?.invoke(exitCode, output ?: listOf())
+						}
+						else
+						{
+							Log.i("$LOG_TAG.buildShSession", "Successful")
+						}
+						_isShStarting = false
+					}})
+			_sh = sh
+			return sh
+		}
 	}
 
 	private fun setContext(context: Context)
@@ -105,18 +102,8 @@ object ShHelper
 
 	private val LOG_TAG = ShHelper::class.java.canonicalName
 
-	private val _handler = Handler()
 	private var _appContext: Context? = null
 
-	private var _sh: Shell.Interactive = buildShSession()
-		get()
-		{
-			if (!field.isRunning && !_isShStarting)
-			{
-				field = buildShSession()
-			}
-			return field
-		}
-
+	private var _sh: Shell.Interactive? = null
 	private var _isShStarting: Boolean = false
 }
