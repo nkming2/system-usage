@@ -3,6 +3,7 @@ package com.nkming.sysusage
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import com.nkming.utils.Log
 
 data class DiskStat(
 	// B for Byte
@@ -123,36 +124,45 @@ class DiskStatProvider(context: Context,
 
 	private fun onCommandOutput(output: List<String>)
 	{
-		val now = System.currentTimeMillis()
-		val stats = parseOutput(output)
-		val combined = stats.fold(MutableStat(), {product, s ->
-		run{
-			product.read.completed += s.read.completed
-			product.read.merged += s.read.merged
-			product.read.sectors += s.read.sectors
-			product.read.time += s.read.time
-			product.write.completed += s.write.completed
-			product.write.merged += s.write.merged
-			product.write.sectors += s.write.sectors
-			product.write.time += s.write.time
-			product.ioInProgress += s.ioInProgress
-			product.ioTime += s.ioTime
-			product.ioTimeWeighted += s.ioTimeWeighted
-			product
-		}})
 		try
 		{
-			if (_isReady)
+			val now = System.currentTimeMillis()
+			val stats = parseOutput(output)
+			val combined = stats.fold(MutableStat(), {product, s ->
+			run{
+				product.read.completed += s.read.completed
+				product.read.merged += s.read.merged
+				product.read.sectors += s.read.sectors
+				product.read.time += s.read.time
+				product.write.completed += s.write.completed
+				product.write.merged += s.write.merged
+				product.write.sectors += s.write.sectors
+				product.write.time += s.write.time
+				product.ioInProgress += s.ioInProgress
+				product.ioTime += s.ioTime
+				product.ioTimeWeighted += s.ioTimeWeighted
+				product
+			}})
+			try
 			{
-				val diskStat = transformStat(now,  combined.immutable())
-				onStatUpdate?.invoke(diskStat)
+				if (_isReady)
+				{
+					val diskStat = transformStat(now,  combined.immutable())
+					onStatUpdate?.invoke(diskStat)
+				}
+			}
+			finally
+			{
+				_prevTime = now
+				_prevStat = combined.immutable()
+				_isReady = true
 			}
 		}
-		finally
+		catch (e: Exception)
 		{
-			_prevTime = now
-			_prevStat = combined.immutable()
-			_isReady = true
+			Log.w("$LOG_TAG.onCommandOutput", "Failed while parsing output", e)
+			// Should we return something else?
+			onStatUpdate?.invoke(DiskStat(0, .0, 0, .0))
 		}
 	}
 

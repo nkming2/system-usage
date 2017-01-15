@@ -136,32 +136,41 @@ class CpuStatProvider(context: Context,
 
 	private fun onCommandOutput(output: List<String>)
 	{
-		val online = output[0]
-		val present = output[1]
-		val count = parseCoreCountOutput(present)
-		val timeStates = ArrayList<List<String>>(count)
-		var readLine = 2
-		for (i in 0..count - 1)
+		try
 		{
-			val til = output.withIndex().indexOfFirst{
-					it.index >= readLine && it.value == ":)"}
-			if (til == -1)
+			val online = output[0]
+			val present = output[1]
+			val count = parseCoreCountOutput(present)
+			val timeStates = ArrayList<List<String>>(count)
+			var readLine = 2
+			for (i in 0..count - 1)
 			{
-				throw IllegalArgumentException(
-						"Unknown output: ${output.joinToString("\n")}")
+				val til = output.withIndex().indexOfFirst{
+						it.index >= readLine && it.value == ":)"}
+				if (til == -1)
+				{
+					throw IllegalArgumentException(
+							"Unknown output: ${output.joinToString("\n")}")
+				}
+				timeStates += output.subList(readLine, til)
+				readLine = til + 1
 			}
-			timeStates += output.subList(readLine, til)
-			readLine = til + 1
+			val stats = output.slice(readLine..output.size - 1)
+			val stat = parseCommandOutput(online, present, timeStates, stats)
+			if (_isReady)
+			{
+				onStatUpdate?.invoke(stat)
+			}
+			else
+			{
+				_isReady = true
+			}
 		}
-		val stats = output.slice(readLine..output.size - 1)
-		val stat = parseCommandOutput(online, present, timeStates, stats)
-		if (_isReady)
+		catch (e: Exception)
 		{
-			onStatUpdate?.invoke(stat)
-		}
-		else
-		{
-			_isReady = true
+			Log.w("$LOG_TAG.onCommandOutput", "Failed while parsing output", e)
+			// Should we return something else?
+			onStatUpdate?.invoke(CpuStat(listOf(CpuCoreStat(true, .0, .0))))
 		}
 	}
 
