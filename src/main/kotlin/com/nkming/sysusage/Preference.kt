@@ -17,6 +17,31 @@ class Preference(context: Context, pref: SharedPreferences)
 		}
 	}
 
+	fun commit(): Boolean
+	{
+		return _editLock.withLock(
+		{
+			if (_edit.commit())
+			{
+				__edit = null
+				return true
+			}
+			else
+			{
+				return false
+			}
+		})
+	}
+
+	fun apply()
+	{
+		_editLock.withLock(
+		{
+			_edit.apply()
+			__edit = null
+		})
+	}
+
 	var onSharedPreferenceChangeListener
 			: SharedPreferences.OnSharedPreferenceChangeListener? = null
 		set(v)
