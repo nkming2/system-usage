@@ -12,7 +12,10 @@ class SystemUsageApp : Application()
 		super.onCreate()
 		initLog()
 		initDefaultPref()
-		startServiceIfNeeded()
+
+		val pref = Preference.from(this)
+		migrateVersion(pref)
+		startServiceIfNeeded(pref)
 	}
 
 	private fun initLog()
@@ -27,9 +30,32 @@ class SystemUsageApp : Application()
 				Context.MODE_PRIVATE, R.xml.preference, false)
 	}
 
-	private fun startServiceIfNeeded()
+	private fun migrateVersion(pref: Preference)
 	{
-		val pref = Preference.from(this)
+		if (pref.lastVersion == BuildConfig.VERSION_CODE)
+		{
+			// Same version
+			return
+		}
+		else if (pref.lastVersion == -1)
+		{
+			// New install
+		}
+		else if (pref.lastVersion < BuildConfig.VERSION_CODE)
+		{
+			// Upgrade
+			// Currently no migration needed
+		}
+		else if (pref.lastVersion > BuildConfig.VERSION_CODE)
+		{
+			// Downgrade o.O
+		}
+		pref.lastVersion = BuildConfig.VERSION_CODE
+		pref.commit()
+	}
+
+	private fun startServiceIfNeeded(pref: Preference)
+	{
 		if (pref.isEnableCpu || pref.isEnableMem || pref.isEnableNet
 				|| pref.isEnableDisk)
 		{

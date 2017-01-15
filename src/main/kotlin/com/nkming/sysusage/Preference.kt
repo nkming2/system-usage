@@ -57,6 +57,16 @@ class Preference(context: Context, pref: SharedPreferences)
 			}
 		}
 
+	var lastVersion: Int
+		get()
+		{
+			return _pref.getInt(_lastVersionKey, -1)
+		}
+		set(v)
+		{
+			_edit.putInt(_lastVersionKey, v)
+		}
+
 	var intervalMul: Int
 		get()
 		{
@@ -216,6 +226,9 @@ class Preference(context: Context, pref: SharedPreferences)
 		{
 			_edit.putBoolean(_darkThemeKey, v)
 		}
+
+	private val _lastVersionKey by lazy{_context.getString(
+			R.string.pref_last_version_key)}
 
 	private val _intervalMulKey by lazy{_context.getString(
 			R.string.pref_interval_mul_key)}
