@@ -53,12 +53,12 @@ object ShHelper
 	{
 		synchronized(this)
 		{
-			Log.d(LOG_TAG, "requestShSession()")
 			if (_isShStarting || (_sh?.isRunning ?: false))
 			{
 				return _sh!!
 			}
 
+			Log.d("$LOG_TAG.requestShSession", "Starting new session")
 			_isShStarting = true
 			val sh = Shell.Builder()
 					.useSH()
