@@ -32,7 +32,6 @@
 			android:layout_height="wrap_content"
 			android:layout_alignBottom="@id/title_area"
 			android:padding="16dp"
-			android:background="@drawable/setup_wizard_title_text_bg"
 			android:textAppearance="@style/TextAppearance.AppCompat.Headline"
 			android:textColor="@color/md_white_1000"
 			android:text="@string/app_name" />
