@@ -59,12 +59,13 @@ class CpuNotifBuilder(context: Context)
 		val level_ = Math.min(Math.max(0, level), 100)
 
 		val iconId = _context.resources.getIdentifier(
-				"ic_cpu_%d_white_24dp".format(level_), "drawable",
+				"ic_cpu_%d_white_24dp".format(Locale.US, level_), "drawable",
 				BuildConfig.APPLICATION_ID)
 		if (iconId == 0)
 		{
 			throw RuntimeException(
-					"Icon not found: ic_cpu_%d_white_24dp".format(level_))
+					"Icon not found: ic_cpu_%d_white_24dp".format(Locale.US,
+							level_))
 		}
 
 		val builder = getNotifBuilder(when_)
@@ -104,12 +105,13 @@ class CpuNotifBuilder(context: Context)
 			val level_ = Math.min(Math.max(0, level), 100)
 
 			val iconId = _context.resources.getIdentifier(
-					"ic_cpu_%d_white_24dp".format(level_), "drawable",
+					"ic_cpu_%d_white_24dp".format(Locale.US, level_), "drawable",
 					BuildConfig.APPLICATION_ID)
 			if (iconId == 0)
 			{
 				throw RuntimeException(
-						"Icon not found: ic_cpu_%d_white_24dp".format(level_))
+						"Icon not found: ic_cpu_%d_white_24dp".format(Locale.US,
+								level_))
 			}
 			val title = _context.getString(R.string.cpu_notif_title, coreId + 1,
 					level_)

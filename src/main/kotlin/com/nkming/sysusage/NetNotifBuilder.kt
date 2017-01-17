@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
+import java.util.*
 
 class NetNotifBuilder(context: Context)
 {
@@ -32,12 +33,13 @@ class NetNotifBuilder(context: Context)
 			val level = Math.min(Math.max(0, (stat.rxUsage * 100.0).toInt()),
 					100)
 			val iconId = _context.resources.getIdentifier(
-					"ic_net_dl_%d_white_24dp".format(level), "drawable",
-					BuildConfig.APPLICATION_ID)
+					"ic_net_dl_%d_white_24dp".format(Locale.US, level),
+					"drawable", BuildConfig.APPLICATION_ID)
 			if (iconId == 0)
 			{
 				throw RuntimeException(
-						"Icon not found: ic_net_dl_%d_white_24dp".format(level))
+						"Icon not found: ic_net_dl_%d_white_24dp".format(
+								Locale.US, level))
 			}
 			getNotifBuilder(when_)
 					.setContentTitle(_context.getString(
@@ -61,12 +63,13 @@ class NetNotifBuilder(context: Context)
 			val level = Math.min(Math.max(0, (stat.txUsage * 100.0).toInt()),
 					100)
 			val iconId = _context.resources.getIdentifier(
-					"ic_net_ul_%d_white_24dp".format(level), "drawable",
-					BuildConfig.APPLICATION_ID)
+					"ic_net_ul_%d_white_24dp".format(Locale.US, level),
+					"drawable", BuildConfig.APPLICATION_ID)
 			if (iconId == 0)
 			{
 				throw RuntimeException(
-						"Icon not found: ic_net_ul_%d_white_24dp".format(level))
+						"Icon not found: ic_net_ul_%d_white_24dp".format(
+								Locale.US, level))
 			}
 			getNotifBuilder(when_ - 1)
 					.setContentTitle(_context.getString(

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
 import com.nkming.utils.Log
+import java.util.*
 
 class MemNotifBuilder(context: Context)
 {
@@ -37,12 +38,13 @@ class MemNotifBuilder(context: Context)
 		val availMb = avail / 1024 / 1024
 
 		val iconId = _context.resources.getIdentifier(
-				"ic_mem_%d_white_24dp".format(level_), "drawable",
+				"ic_mem_%d_white_24dp".format(Locale.US, level_), "drawable",
 				BuildConfig.APPLICATION_ID)
 		if (iconId == 0)
 		{
 			throw RuntimeException(
-					"Icon not found: ic_mem_%d_white_24dp".format(level_))
+					"Icon not found: ic_mem_%d_white_24dp".format(Locale.US,
+							level_))
 		}
 
 		return NotificationCompat.Builder(_context)

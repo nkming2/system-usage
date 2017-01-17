@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
+import java.util.*
 
 class DiskNotifBuilder(context: Context)
 {
@@ -24,12 +25,13 @@ class DiskNotifBuilder(context: Context)
 		val level = Math.min(Math.max(0, (stat.readUsage * 100.0).toInt()),
 				100)
 		val iconId = _context.resources.getIdentifier(
-				"ic_disk_read_%d_white_24dp".format(level), "drawable",
+				"ic_disk_read_%d_white_24dp".format(Locale.US, level), "drawable",
 				BuildConfig.APPLICATION_ID)
 		if (iconId == 0)
 		{
 			throw RuntimeException(
-					"Icon not found: ic_disk_read_%d_white_24dp".format(level))
+					"Icon not found: ic_disk_read_%d_white_24dp".format(
+							Locale.US, level))
 		}
 		return getNotifBuilder(when_)
 				.setContentTitle(_context.getString(
@@ -45,12 +47,13 @@ class DiskNotifBuilder(context: Context)
 		val level = Math.min(Math.max(0, (stat.writeUsage * 100.0).toInt()),
 				100)
 		val iconId = _context.resources.getIdentifier(
-				"ic_disk_write_%d_white_24dp".format(level), "drawable",
-				BuildConfig.APPLICATION_ID)
+				"ic_disk_write_%d_white_24dp".format(Locale.US, level),
+				"drawable", BuildConfig.APPLICATION_ID)
 		if (iconId == 0)
 		{
 			throw RuntimeException(
-					"Icon not found: ic_disk_write_%d_white_24dp".format(level))
+					"Icon not found: ic_disk_write_%d_white_24dp".format(
+							Locale.US, level))
 		}
 		return getNotifBuilder(when_ - 1)
 				.setContentTitle(_context.getString(
