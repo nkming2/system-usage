@@ -62,6 +62,7 @@ class MemNotifBuilder(context: Context)
 				.setOngoing(true)
 				.setLocalOnly(true)
 				.setColor(ContextCompat.getColor(_context, R.color.notif))
+				.setGroup(when_.toString())
 				.build()
 	}
 
