@@ -218,11 +218,11 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		_disk.isChecked = _pref.isEnableDisk
 		if (isRestoreBackstack())
 		{
-			startExitReverseTransition(_transitViews, {enableInputs()})
+			startExitReverseTransition(_doneTransitViews, {enableInputs()})
 		}
 		else
 		{
-			startEnterTransition(_transitViews, {enableInputs()})
+			startEnterTransition(_normalTransitViews, {enableInputs()})
 		}
 	}
 
@@ -230,7 +230,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 	{
 		if (!super.onBackPressed())
 		{
-			startEnterReverseTransition(_transitViews,
+			startEnterReverseTransition(_normalTransitViews,
 			{
 				fragmentManager.popBackStack()
 			}, 100L)
@@ -241,7 +241,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 	private fun onNextClick()
 	{
 		disableInputs()
-		startExitTransition(_transitViews,
+		startExitTransition(_doneTransitViews,
 		{
 			val f = if (_pref.isEnableNet)
 			{
@@ -253,8 +253,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 			}
 			else
 			{
-				activity.finish()
-				return@startExitTransition
+				SetupWizardDoneFragment.create()
 			}
 			fragmentManager.beginTransaction()
 					.replace(R.id.container, f)
@@ -303,9 +302,20 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 	private val _mem by lazyView<SwitchCompat>(R.id.mem_switch)
 	private val _net by lazyView<SwitchCompat>(R.id.net_switch)
 	private val _disk by lazyView<SwitchCompat>(R.id.disk_switch)
-	private val _transitViews by viewAwareLazy(
+	private val _normalTransitViews by viewAwareLazy(
 	{
 		listOf(_cpu, _mem, _net, _disk)
+	})
+	private val _doneTransitViews by viewAwareLazy(
+	{
+		if (_pref.isEnableNet || _pref.isEnableDisk)
+		{
+			_normalTransitViews
+		}
+		else
+		{
+			listOf(_cpu, _mem, _net, _disk, _next)
+		}
 	})
 }
 
