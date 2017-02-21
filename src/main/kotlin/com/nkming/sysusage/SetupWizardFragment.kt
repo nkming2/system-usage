@@ -838,7 +838,7 @@ class SetupWizardDoneFragment : SetupWizardFragment()
 	}
 
 	private val _pref by lazy{Preference.from(context)}
-	private val _done by lazyView<View>(R.id.done)
+	private val _done by lazyView<View>(R.id.next)
 	private val _transitViews by viewAwareLazy(
 	{
 		listOf(findView<View>(R.id.message),
