@@ -40,13 +40,13 @@ class DevFragment : FragmentEx()
 	override fun onStart()
 	{
 		super.onStart()
-		CpuStatService.plug(context)
+		CpuStatService.plug(context!!)
 	}
 
 	override fun onStop()
 	{
 		super.onStop()
-		CpuStatService.unplug(context)
+		CpuStatService.unplug(context!!)
 	}
 
 	private fun onStatAvailable(stat: CpuStat)
@@ -78,7 +78,7 @@ class DevFragment : FragmentEx()
 	}
 
 	private val _broadcastManager by lazy{
-			LocalBroadcastManager.getInstance(context)}
+			LocalBroadcastManager.getInstance(context!!)}
 
 	private val _count by lazyView<TextView>(R.id.count)
 	private val _status by lazyView<TextView>(R.id.status)

@@ -115,7 +115,7 @@ abstract class SetupWizardFragment : FragmentEx()
 	}
 
 	private val _handler = Handler()
-	private val _xAmplitude by lazy{DimensionUtils.dpToPx(context, 80f)}
+	private val _xAmplitude by lazy{DimensionUtils.dpToPx(context!!, 80f)}
 	private var _hasViewDestroyed = false
 }
 
@@ -156,7 +156,7 @@ class SetupWizardGreetingFragment : SetupWizardFragment()
 		startExitTransition(_transitViews,
 		{
 			val f = SetupWizardMonitorFragment.create()
-			fragmentManager.beginTransaction()
+			fragmentManager!!.beginTransaction()
 					.replace(R.id.container, f)
 					.addToBackStack(null)
 					.commitAllowingStateLoss()
@@ -180,7 +180,7 @@ class SetupWizardGreetingFragment : SetupWizardFragment()
 		_next.setOnClickListener(null)
 	}
 
-	private val _pref by lazy{Preference.from(context)}
+	private val _pref by lazy{Preference.from(context!!)}
 	private val _next by lazyView<View>(R.id.next)
 	private val _theme by lazyView<SwitchCompat>(R.id.theme_switch)
 	private val _transitViews by viewAwareLazy(
@@ -232,7 +232,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		{
 			startEnterReverseTransition(_normalTransitViews,
 			{
-				fragmentManager.popBackStack()
+				fragmentManager!!.popBackStack()
 			}, 100L)
 		}
 		return true
@@ -255,7 +255,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 			{
 				SetupWizardDoneFragment.create()
 			}
-			fragmentManager.beginTransaction()
+			fragmentManager!!.beginTransaction()
 					.replace(R.id.container, f)
 					.addToBackStack(null)
 					.commitAllowingStateLoss()
@@ -296,7 +296,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		_next.setOnClickListener(null)
 	}
 
-	private val _pref by lazy{Preference.from(context)}
+	private val _pref by lazy{Preference.from(context!!)}
 	private val _next by lazyView<View>(R.id.next)
 	private val _cpu by lazyView<SwitchCompat>(R.id.cpu_switch)
 	private val _mem by lazyView<SwitchCompat>(R.id.mem_switch)
@@ -365,7 +365,7 @@ class SetupWizardNetMobileFragment : SetupWizardFragment()
 		{
 			startEnterReverseTransition(_transitViews,
 			{
-				fragmentManager.popBackStack()
+				fragmentManager!!.popBackStack()
 			}, 100L)
 		}
 		return true
@@ -378,7 +378,7 @@ class SetupWizardNetMobileFragment : SetupWizardFragment()
 		startExitTransition(_transitViews,
 		{
 			val f = SetupWizardNetWifiFragment.create()
-			fragmentManager.beginTransaction()
+			fragmentManager!!.beginTransaction()
 					.replace(R.id.container, f)
 					.addToBackStack(null)
 					.commitAllowingStateLoss()
@@ -468,9 +468,9 @@ class SetupWizardNetMobileFragment : SetupWizardFragment()
 		unit.setSelection(if (v >= 1000000L) 1 else 0)
 	}
 
-	private val _pref by lazy{Preference.from(context)}
+	private val _pref by lazy{Preference.from(context!!)}
 	private val _next by lazyView<View>(R.id.next)
-	private val _netTemplateStrs by lazy{context.resources.getStringArray(
+	private val _netTemplateStrs by lazy{context!!.resources.getStringArray(
 			R.array.pref_net_mobile_templates)}
 	private val _netTemplate by lazyView<Spinner>(R.id.net_template)
 	private val _dlInput by lazyView<EditText>(R.id.dl_input)
@@ -527,7 +527,7 @@ class SetupWizardNetWifiFragment : SetupWizardFragment()
 		{
 			startEnterReverseTransition(_normalTransitViews,
 			{
-				fragmentManager.popBackStack()
+				fragmentManager!!.popBackStack()
 			}, 100L)
 		}
 		return true
@@ -547,7 +547,7 @@ class SetupWizardNetWifiFragment : SetupWizardFragment()
 			{
 				SetupWizardDoneFragment.create()
 			}
-			fragmentManager.beginTransaction()
+			fragmentManager!!.beginTransaction()
 					.replace(R.id.container, f)
 					.addToBackStack(null)
 					.commitAllowingStateLoss()
@@ -612,7 +612,7 @@ class SetupWizardNetWifiFragment : SetupWizardFragment()
 		unit.setSelection(if (v >= 1000000L) 1 else 0)
 	}
 
-	private val _pref by lazy{Preference.from(context)}
+	private val _pref by lazy{Preference.from(context!!)}
 	private val _next by lazyView<View>(R.id.next)
 	private val _dlInput by lazyView<EditText>(R.id.dl_input)
 	private val _dlUnit by lazyView<Spinner>(R.id.dl_unit)
@@ -681,7 +681,7 @@ class SetupWizardDiskFragment : SetupWizardFragment()
 		{
 			startEnterReverseTransition(_normalTransitViews,
 			{
-				fragmentManager.popBackStack()
+				fragmentManager!!.popBackStack()
 			}, 100L)
 		}
 		return true
@@ -694,7 +694,7 @@ class SetupWizardDiskFragment : SetupWizardFragment()
 		startExitTransition(_doneTransitViews,
 		{
 			val f = SetupWizardDoneFragment.create()
-			fragmentManager.beginTransaction()
+			fragmentManager!!.beginTransaction()
 					.replace(R.id.container, f)
 					.addToBackStack(null)
 					.commitAllowingStateLoss()
@@ -759,7 +759,7 @@ class SetupWizardDiskFragment : SetupWizardFragment()
 		unit.setSelection(if (v >= 1048576L) 1 else 0)
 	}
 
-	private val _pref by lazy{Preference.from(context)}
+	private val _pref by lazy{Preference.from(context!!)}
 	private val _next by lazyView<View>(R.id.next)
 	private val _readInput by lazyView<EditText>(R.id.read_input)
 	private val _readUnit by lazyView<Spinner>(R.id.read_unit)
@@ -809,7 +809,7 @@ class SetupWizardDoneFragment : SetupWizardFragment()
 		{
 			startEnterReverseTransition(_transitViews,
 			{
-				fragmentManager.popBackStack()
+				fragmentManager!!.popBackStack()
 			}, 100L)
 		}
 		return true
@@ -822,7 +822,7 @@ class SetupWizardDoneFragment : SetupWizardFragment()
 		if (_pref.isEnableCpu || _pref.isEnableMem || _pref.isEnableNet
 				|| _pref.isEnableDisk)
 		{
-			NotifService.start(context)
+			NotifService.start(context!!)
 		}
 	}
 
@@ -837,7 +837,7 @@ class SetupWizardDoneFragment : SetupWizardFragment()
 		_pref.commit()
 	}
 
-	private val _pref by lazy{Preference.from(context)}
+	private val _pref by lazy{Preference.from(context!!)}
 	private val _done by lazyView<View>(R.id.next)
 	private val _transitViews by viewAwareLazy(
 	{
