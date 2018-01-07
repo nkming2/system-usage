@@ -23,11 +23,11 @@ android {
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-	compile project(':libutils')
-	compile "com.android.support:appcompat-v7:$support_version"
-	compile "com.android.support:support-v4:$support_version"
-	compile "com.android.support:design:$support_version"
-	compile 'eu.chainfire:libsuperuser:1.0.0.+'
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	implementation project(':libutils')
+	implementation "com.android.support:appcompat-v7:$support_version"
+	implementation "com.android.support:support-v4:$support_version"
+	implementation "com.android.support:design:$support_version"
+	implementation 'eu.chainfire:libsuperuser:1.0.0.+'
 }
