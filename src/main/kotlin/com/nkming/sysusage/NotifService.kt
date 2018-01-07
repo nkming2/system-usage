@@ -4,8 +4,9 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.app.Service
 import android.content.*
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import com.nkming.utils.Log
 
 class NotifService : Service(),
@@ -16,7 +17,8 @@ class NotifService : Service(),
 		@JvmStatic
 		fun start(context: Context)
 		{
-			context.startService(Intent(context, NotifService::class.java))
+			ContextCompat.startForegroundService(context,
+					Intent(context, NotifService::class.java))
 		}
 
 		private val LOG_TAG = NotifService::class.java.canonicalName
