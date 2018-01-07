@@ -5,7 +5,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.*
 import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.app.NotificationCompat
+import android.support.v4.app.NotificationCompat
 import com.nkming.utils.Log
 
 class NotifService : Service(),
