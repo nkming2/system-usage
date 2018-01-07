@@ -186,8 +186,8 @@ class SetupWizardGreetingFragment : SetupWizardFragment()
 	private val _transitViews by viewAwareLazy(
 	{
 		listOf(findView<View>(R.id.message),
-				findView<View>(R.id.detail_message),
-				findView<View>(R.id.theme_switch))
+				findView(R.id.detail_message),
+				findView(R.id.theme_switch))
 	})
 
 }
@@ -481,8 +481,8 @@ class SetupWizardNetMobileFragment : SetupWizardFragment()
 	{
 		listOf(findView<View>(R.id.detail_message),
 				_netTemplate,
-				findView<View>(R.id.dl_container),
-				findView<View>(R.id.ul_container))
+				findView(R.id.dl_container),
+				findView(R.id.ul_container))
 	})
 }
 
@@ -768,14 +768,14 @@ class SetupWizardDiskFragment : SetupWizardFragment()
 	private val _normalTransitViews by viewAwareLazy(
 	{
 		listOf(findView<View>(R.id.detail_message),
-				findView<View>(R.id.read_container),
-				findView<View>(R.id.write_container))
+				findView(R.id.read_container),
+				findView(R.id.write_container))
 	})
 	private val _doneTransitViews by viewAwareLazy(
 	{
 		listOf(findView<View>(R.id.detail_message),
-				findView<View>(R.id.read_container),
-				findView<View>(R.id.write_container),
+				findView(R.id.read_container),
+				findView(R.id.write_container),
 				_next)
 	})
 }
