@@ -21,6 +21,9 @@
 	<string name="disk_read_notif_title" formatted="false">Disk read: %d%%</string>
 	<string name="disk_write_notif_title" formatted="false">Disk write: %d%%</string>
 
+	<string name="notif_usage_channel_name">Usage Indicator</string>
+	<string name="notif_usage_channel_description">Show the current system usage</string>
+
 	<string name="setup_wizard_greeting_message">Nice to meet you &#x263a;</string>
 	<string name="setup_wizard_greeting_detail_message">We\'ll help you to configure this app to your needs</string>
 	<string name="setup_wizard_greeting_theme_switch">Dark theme</string>

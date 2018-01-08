@@ -4,12 +4,13 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
+import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import com.nkming.utils.Log
 import java.util.*
 
-class MemNotifBuilder(context: Context)
+class MemNotifBuilder(context: Context, channelId: String)
 {
 	companion object
 	{
@@ -47,7 +48,7 @@ class MemNotifBuilder(context: Context)
 							level_))
 		}
 
-		return NotificationCompat.Builder(_context)
+		val builder = NotificationCompat.Builder(_context, _channelId)
 				.setContentTitle(_context.getString(R.string.mem_notif_title,
 						level_))
 				.setContentText(_context.getString(R.string.mem_notif_content,
@@ -56,14 +57,17 @@ class MemNotifBuilder(context: Context)
 				.setSmallIcon(iconId)
 				.setContentIntent(getOnClickIntent())
 				.setOnlyAlertOnce(true)
-				.setPriority(priority)
 				.setWhen(when_)
 				.setShowWhen(false)
 				.setOngoing(true)
 				.setLocalOnly(true)
 				.setColor(ContextCompat.getColor(_context, R.color.notif))
 				.setGroup(when_.toString())
-				.build()
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		{
+			builder.priority = priority
+		}
+		return builder.build()
 	}
 
 	private fun getOnClickIntent(): PendingIntent
@@ -76,4 +80,5 @@ class MemNotifBuilder(context: Context)
 	}
 
 	private val _context = context
+	private val _channelId = channelId
 }

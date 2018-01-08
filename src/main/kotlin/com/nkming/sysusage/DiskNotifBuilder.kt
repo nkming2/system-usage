@@ -4,11 +4,12 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
+import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import java.util.*
 
-class DiskNotifBuilder(context: Context)
+class DiskNotifBuilder(context: Context, channelId: String)
 {
 	var priority = NotificationCompat.PRIORITY_LOW
 
@@ -75,18 +76,22 @@ class DiskNotifBuilder(context: Context)
 
 	private fun getNotifBuilder(when_: Long): NotificationCompat.Builder
 	{
-		val product = NotificationCompat.Builder(_context)
+		val product = NotificationCompat.Builder(_context, _channelId)
 				.setContentIntent(getOnClickIntent())
 				.setOnlyAlertOnce(true)
-				.setPriority(priority)
 				.setWhen(when_)
 				.setShowWhen(false)
 				.setOngoing(true)
 				.setLocalOnly(true)
 				.setColor(ContextCompat.getColor(_context, R.color.notif))
 				.setGroup(when_.toString())
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		{
+			product.priority = priority
+		}
 		return product as NotificationCompat.Builder
 	}
 
 	private val _context = context
+	private val _channelId = channelId
 }

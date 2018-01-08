@@ -1,9 +1,12 @@
 package com.nkming.sysusage
 
+import android.annotation.TargetApi
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.*
+import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
@@ -22,6 +25,7 @@ class NotifService : Service(),
 		}
 
 		private val LOG_TAG = NotifService::class.java.canonicalName
+		private val CHANNEL_ID = "usage"
 	}
 
 	override fun onBind(intent: Intent?) = null
@@ -38,6 +42,11 @@ class NotifService : Service(),
 				IntentFilter(Res.ACTION_NET_STAT_AVAILABLE))
 		_broadcastManager.registerReceiver(_diskStatAvailableReceiver,
 				IntentFilter(Res.ACTION_DISK_STAT_AVAILABLE))
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			initNotifChannel()
+		}
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
@@ -160,6 +169,17 @@ class NotifService : Service(),
 			_memNotifBuilder.priority = priority
 			_netNotifBuilder.priority = priority
 		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	private fun initNotifChannel()
+	{
+		val ch = NotificationChannel(CHANNEL_ID,
+				getString(R.string.notif_usage_channel_name),
+				NotificationManager.IMPORTANCE_LOW)
+		ch.description = getString(R.string.notif_usage_channel_description)
+		ch.lockscreenVisibility = NotificationCompat.VISIBILITY_SECRET
+		_notifManager.createNotificationChannel(ch)
 	}
 
 	private fun onStatAvailable(stat: CpuStat)
@@ -332,16 +352,19 @@ class NotifService : Service(),
 
 	private fun buildLoadingNotif(): Notification
 	{
-		return NotificationCompat.Builder(this)
+		val builder = NotificationCompat.Builder(this, CHANNEL_ID)
 				.setContentTitle(getString(R.string.notif_loading))
 				.setProgress(100, 0, true)
 				.setSmallIcon(R.drawable.ic_sync_white_24dp)
 				.setOnlyAlertOnce(true)
-				.setPriority(_priority)
 				.setWhen(_when)
 				.setShowWhen(false)
 				.setLocalOnly(true)
-				.build()
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		{
+			builder.priority = _priority
+		}
+		return builder.build()
 	}
 
 	private val _cpuStatAvailableReceiver = object: BroadcastReceiver()
@@ -398,38 +421,34 @@ class NotifService : Service(),
 
 	private var _isEnableCpu = false
 	private var _cpuStat: CpuStat? = null
-	private val _cpuNotifBuilder by lazy(
-	{
-		val product = CpuNotifBuilder(this)
+	private val _cpuNotifBuilder by lazy{
+		val product = CpuNotifBuilder(this, CHANNEL_ID)
 		product.isOverall = _pref.isOverallCpu
 		product.priority = _priority
 		product
-	})
+	}
 
 	private var _isEnableMem = false
 	private var _memStat: MemStat? = null
-	private val _memNotifBuilder by lazy(
-	{
-		val product = MemNotifBuilder(this)
+	private val _memNotifBuilder by lazy{
+		val product = MemNotifBuilder(this, CHANNEL_ID)
 		product.priority = _priority
 		product
-	})
+	}
 
 	private var _isEnableNet = false
 	private var _netStat: NetStat? = null
-	private val _netNotifBuilder by lazy(
-	{
-		val product = NetNotifBuilder(this)
+	private val _netNotifBuilder by lazy{
+		val product = NetNotifBuilder(this, CHANNEL_ID)
 		product.priority = _priority
 		product
-	})
+	}
 
 	private var _isEnableDisk = false
 	private var _diskStat: DiskStat? = null
-	private val _diskNotifBuilder by lazy(
-	{
-		val product = DiskNotifBuilder(this)
+	private val _diskNotifBuilder by lazy{
+		val product = DiskNotifBuilder(this, CHANNEL_ID)
 		product.priority = _priority
 		product
-	})
+	}
 }
