@@ -77,7 +77,18 @@ class PreferenceFragment : PreferenceFragmentEx(),
 	private fun init()
 	{
 		initIntervalMulPref()
+		initPriorityPref()
 		initLockScreenPref()
+	}
+
+	private fun initPriorityPref()
+	{
+		val pref = findPreference(getString(R.string.pref_high_priority_key))
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			// On O+, user should config via notification channel
+			preferenceScreen.removePreference(pref)
+		}
 	}
 
 	private fun initLockScreenPref()
@@ -89,11 +100,10 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		}
 		else
 		{
-			pref.setOnPreferenceClickListener(
-			{
+			pref.setOnPreferenceClickListener{
 				startNotifSetting()
 				true
-			})
+			}
 		}
 	}
 

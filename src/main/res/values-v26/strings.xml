@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="pref_high_priority_summary_on">Adjust priority in system settings</string>
+	<string name="pref_high_priority_summary_off">Adjust priority in system settings</string>
+
+	<string name="pref_lock_screen_title">Notification settings</string>
+	<string name="pref_lock_screen_summary">Open Android Settings to customize the notifications, like priority, lock screen visibility, etc.</string>
+</resources>
