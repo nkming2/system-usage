@@ -70,6 +70,10 @@
 	<string name="pref_autorun_key" translatable="false">auto_run</string>
 	<string name="pref_autorun_title">Autorun on boot</string>
 
+	<string name="pref_lock_screen_key" translatable="false">lock_screen</string>
+	<string name="pref_lock_screen_title">Adjust visibility on lock screen</string>
+	<string name="pref_lock_screen_summary">You could disable the notifications being shown on lock screen in Android Settings</string>
+
 	<string name="pref_optimize_battery_key" translatable="false">optimize_battery</string>
 	<string name="pref_optimize_battery_title">Optimize battery usage</string>
 	<string name="pref_optimize_battery_summary">Halting app when device screen is off. Recommended to keep enabled unless weird things happen</string>

@@ -1,7 +1,12 @@
 package com.nkming.sysusage
 
+import android.annotation.TargetApi
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.TextView
 import com.nkming.utils.Log
@@ -72,6 +77,24 @@ class PreferenceFragment : PreferenceFragmentEx(),
 	private fun init()
 	{
 		initIntervalMulPref()
+		initLockScreenPref()
+	}
+
+	private fun initLockScreenPref()
+	{
+		val pref = findPreference(getString(R.string.pref_lock_screen_key))
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+		{
+			pref.isEnabled = false
+		}
+		else
+		{
+			pref.setOnPreferenceClickListener(
+			{
+				startNotifSetting()
+				true
+			})
+		}
 	}
 
 	private fun initIntervalMulPref()
@@ -125,6 +148,45 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		{
 			Log.e("$LOG_TAG.onNetMobileTemplateChange",
 					"Failed while getMobileNetThroughput()", e)
+		}
+	}
+
+	private fun startNotifSetting()
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			startNotifSettingO()
+		}
+		else if (Build.VERSION.SDK_INT
+				in Build.VERSION_CODES.LOLLIPOP..Build.VERSION_CODES.N_MR1)
+		{
+			startNotifSettingL()
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	private fun startNotifSettingO()
+	{
+		val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+		intent.putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+		startActivity(intent)
+	}
+
+	private fun startNotifSettingL()
+	{
+		try
+		{
+			// Undocumented
+			val intent = Intent("android.settings.APP_NOTIFICATION_SETTINGS")
+			intent.putExtra("app_package", BuildConfig.APPLICATION_ID)
+			intent.putExtra("app_uid", activity.applicationInfo.uid)
+			startActivity(intent)
+		}
+		catch (e: Throwable)
+		{
+			val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+			intent.data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+			startActivity(intent)
 		}
 	}
 

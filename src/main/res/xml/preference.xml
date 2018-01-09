@@ -17,6 +17,12 @@
 		android:summaryOff="@string/pref_high_priority_summary_off"
 		android:defaultValue="false" />
 
+	<Preference
+		android:key="@string/pref_lock_screen_key"
+		android:title="@string/pref_lock_screen_title"
+		android:summary="@string/pref_lock_screen_summary"
+		android:persistent="false" />
+
 	<com.nkming.utils.preference.SwitchPreferenceFix
 		android:key="@string/pref_autorun_key"
 		android:title="@string/pref_autorun_title"
