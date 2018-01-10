@@ -72,6 +72,10 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		{
 			onNetMobileTemplateChange(pref.getString(key, "LTE"))
 		}
+		else if (key == getString(R.string.pref_enable_disk_notif_key))
+		{
+			onEnableDiskNotifChange(pref.getBoolean(key, true))
+		}
 	}
 
 	private fun init()
@@ -165,6 +169,14 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		{
 			Log.e("$LOG_TAG.onNetMobileTemplateChange",
 					"Failed while getMobileNetThroughput()", e)
+		}
+	}
+
+	private fun onEnableDiskNotifChange(v: Boolean)
+	{
+		if (v)
+		{
+			NotifService.start(activity)
 		}
 	}
 
