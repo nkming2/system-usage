@@ -57,22 +57,25 @@ class NotifService : Service(),
 			_hasInit = true
 			startForeground(1, buildLoadingNotif())
 
-			_pref.onSharedPreferenceChangeListener = this
-			if (_pref.isEnableCpu)
+			if (_pref.isEnable)
 			{
-				enableCpu()
-			}
-			if (_pref.isEnableMem)
-			{
-				enableMem()
-			}
-			if (_pref.isEnableNet)
-			{
-				enableNet()
-			}
-			if (_pref.isEnableDisk)
-			{
-				enableDisk()
+				_pref.onSharedPreferenceChangeListener = this
+				if (_pref.isEnableCpu)
+				{
+					enableCpu()
+				}
+				if (_pref.isEnableMem)
+				{
+					enableMem()
+				}
+				if (_pref.isEnableNet)
+				{
+					enableNet()
+				}
+				if (_pref.isEnableDisk)
+				{
+					enableDisk()
+				}
 			}
 
 			stopIfDisabled()
@@ -168,6 +171,16 @@ class NotifService : Service(),
 			_cpuNotifBuilder.priority = priority
 			_memNotifBuilder.priority = priority
 			_netNotifBuilder.priority = priority
+		}
+		else if (key == getString(R.string.pref_enable_key))
+		{
+			if (!pref.getBoolean(key, true))
+			{
+				disableCpu()
+				disableMem()
+				disableNet()
+				disableDisk()
+			}
 		}
 	}
 

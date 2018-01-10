@@ -56,7 +56,7 @@ class SystemUsageApp : Application()
 
 	private fun startServiceIfNeeded(pref: Preference)
 	{
-		if (!pref.hasRunSetupWizard)
+		if (!pref.hasRunSetupWizard || !pref.isEnable)
 		{
 			return
 		}

@@ -77,6 +77,16 @@ class Preference(context: Context, pref: SharedPreferences)
 			_edit.putInt(_lastVersionKey, v)
 		}
 
+	var isEnable: Boolean
+		get()
+		{
+			return _pref.getBoolean(_enableKey, true)
+		}
+		set(v)
+		{
+			_edit.putBoolean(_enableKey, v)
+		}
+
 	var intervalMul: Int
 		get()
 		{
@@ -252,6 +262,7 @@ class Preference(context: Context, pref: SharedPreferences)
 	private val _lastVersionKey by lazy{_context.getString(
 			R.string.pref_last_version_key)}
 
+	private val _enableKey by lazy{_context.getString(R.string.pref_enable_key)}
 	private val _intervalMulKey by lazy{_context.getString(
 			R.string.pref_interval_mul_key)}
 	private val _highPriorityKey by lazy{_context.getString(

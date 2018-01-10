@@ -3,8 +3,14 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
+	<com.nkming.utils.preference.SwitchPreferenceFix
+		android:key="@string/pref_enable_key"
+		android:title="@string/pref_enable_title"
+		android:defaultValue="true" />
+
 	<com.nkming.utils.preference.SeekBarPreference
 		android:key="@string/pref_interval_mul_key"
+		android:dependency="@string/pref_enable_key"
 		android:title="@string/pref_interval_mul_title"
 		app:min="2"
 		app:max="20"
@@ -12,6 +18,7 @@
 
 	<com.nkming.utils.preference.SwitchPreferenceFix
 		android:key="@string/pref_high_priority_key"
+		android:dependency="@string/pref_enable_key"
 		android:title="@string/pref_high_priority_title"
 		android:summaryOn="@string/pref_high_priority_summary_on"
 		android:summaryOff="@string/pref_high_priority_summary_off"
@@ -19,17 +26,20 @@
 
 	<Preference
 		android:key="@string/pref_lock_screen_key"
+		android:dependency="@string/pref_enable_key"
 		android:title="@string/pref_lock_screen_title"
 		android:summary="@string/pref_lock_screen_summary"
 		android:persistent="false" />
 
 	<com.nkming.utils.preference.SwitchPreferenceFix
 		android:key="@string/pref_autorun_key"
+		android:dependency="@string/pref_enable_key"
 		android:title="@string/pref_autorun_title"
 		android:defaultValue="true" />
 
 	<com.nkming.utils.preference.SwitchPreferenceFix
 		android:key="@string/pref_optimize_battery_key"
+		android:dependency="@string/pref_enable_key"
 		android:title="@string/pref_optimize_battery_title"
 		android:summary="@string/pref_optimize_battery_summary"
 		android:defaultValue="true" />
@@ -37,6 +47,7 @@
 	<PreferenceCategory android:title="@string/pref_cpu_notification_category">
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_enable_cpu_notif_key"
+			android:dependency="@string/pref_enable_key"
 			android:title="@string/pref_enable_cpu_notif_title"
 			android:defaultValue="true" />
 
@@ -52,6 +63,7 @@
 	<PreferenceCategory android:title="@string/pref_mem_notification_category">
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_enable_mem_notif_key"
+			android:dependency="@string/pref_enable_key"
 			android:title="@string/pref_enable_mem_notif_title"
 			android:defaultValue="true" />
 	</PreferenceCategory>
@@ -59,6 +71,7 @@
 	<PreferenceCategory android:title="@string/pref_net_notification_category">
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_enable_net_notif_key"
+			android:dependency="@string/pref_enable_key"
 			android:title="@string/pref_enable_net_notif_title"
 			android:defaultValue="true" />
 
@@ -98,6 +111,7 @@
 	<PreferenceCategory android:title="@string/pref_disk_notification_category">
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_enable_disk_notif_key"
+			android:dependency="@string/pref_enable_key"
 			android:title="@string/pref_enable_disk_notif_title"
 			android:defaultValue="true" />
 

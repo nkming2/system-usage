@@ -62,6 +62,9 @@
 	<string name="pref_interval_mul_key" translatable="false">interval_mul</string>
 	<string name="pref_interval_mul_title">Update interval</string>
 
+	<string name="pref_enable_key" translatable="false">enable</string>
+	<string name="pref_enable_title">Enable</string>
+
 	<string name="pref_high_priority_key" translatable="false">high_priority</string>
 	<string name="pref_high_priority_title">High priority</string>
 	<string name="pref_high_priority_summary_on">High priority notifications would show first</string>

@@ -76,6 +76,10 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		{
 			onEnableDiskNotifChange(pref.getBoolean(key, true))
 		}
+		else if (key == getString(R.string.pref_enable_key))
+		{
+			onEnableChange(pref.getBoolean(key, true))
+		}
 	}
 
 	private fun init()
@@ -177,6 +181,19 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		if (v)
 		{
 			NotifService.start(activity)
+		}
+	}
+
+	private fun onEnableChange(v: Boolean)
+	{
+		if (v)
+		{
+			val pref = Preference.from(activity)
+			if (pref.isEnableCpu || pref.isEnableMem || pref.isEnableNet
+					|| pref.isEnableDisk)
+			{
+				NotifService.start(activity)
+			}
 		}
 	}
 
