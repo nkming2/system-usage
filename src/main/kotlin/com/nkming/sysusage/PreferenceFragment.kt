@@ -79,6 +79,7 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		initIntervalMulPref()
 		initPriorityPref()
 		initLockScreenPref()
+		initAbout()
 	}
 
 	private fun initPriorityPref()
@@ -120,6 +121,12 @@ class PreferenceFragment : PreferenceFragmentEx(),
 			}
 		})
 		pref.setSummaryListener{"%.1fs".format(it * 500 / 1000.0)}
+	}
+
+	private fun initAbout()
+	{
+		val aboutVersion = findPreference(getString(R.string.about_version_key))
+		aboutVersion.summary = BuildConfig.VERSION_NAME
 	}
 
 	private fun onEnableCpuNotifChange(v: Boolean)
