@@ -124,9 +124,9 @@ class CpuStatProvider(context: Context,
 		ShHelper.doShCommand(_context, UPDATE_SCRIPT,
 				successWhere = {exitCode, output -> (exitCode == 0
 						&& output.size > 2)},
-				onSuccess = {exitCode, output -> onCommandOutput(output)},
-				onFailure = {exitCode, output -> onFailure?.invoke(
-						output.joinToString("\n"))})
+				onSuccess = {_, output -> onCommandOutput(output)},
+				onFailure = {_, output -> onFailure?.invoke(output.joinToString(
+						"\n"))})
 	}
 
 	protected override fun onStop()
@@ -143,7 +143,7 @@ class CpuStatProvider(context: Context,
 			val count = parseCoreCountOutput(present)
 			val timeStates = ArrayList<List<String>>(count)
 			var readLine = 2
-			for (i in 0..count - 1)
+			for (i in 0 until count)
 			{
 				val til = output.withIndex().indexOfFirst{
 						it.index >= readLine && it.value == ":)"}
@@ -155,7 +155,7 @@ class CpuStatProvider(context: Context,
 				timeStates += output.subList(readLine, til)
 				readLine = til + 1
 			}
-			val stats = output.slice(readLine..output.size - 1)
+			val stats = output.slice(readLine until output.size)
 			val stat = parseCommandOutput(online, present, timeStates, stats)
 			if (_isReady)
 			{
@@ -183,7 +183,7 @@ class CpuStatProvider(context: Context,
 		val normalizedUsages = normalizeCpuUsages(usages, timeStates)
 
 		val cores = ArrayList<CpuCoreStat>(count)
-		for (i in 0..count - 1)
+		for (i in 0 until count)
 		{
 			cores += CpuCoreStat(isOnlines[i], usages[i], normalizedUsages[i])
 		}
@@ -230,7 +230,7 @@ class CpuStatProvider(context: Context,
 		val products = DoubleArray(count, {.0})
 		for (s in stats)
 		{
-			val statAry = s.split(" ").filter{it.length > 0}
+			val statAry = s.split(" ").filter{it.isNotEmpty()}
 			if (!statAry[0].startsWith("cpu") || statAry[0] == "cpu")
 			{
 				continue
@@ -281,7 +281,7 @@ class CpuStatProvider(context: Context,
 			else
 			{
 				val idle = (if (statAry.size - 1 > 5) diffs[3] + diffs[4]
-				else diffs[3])
+						else diffs[3])
 				products[core] = 1 - (idle.toDouble() / total)
 			}
 		}
@@ -293,12 +293,12 @@ class CpuStatProvider(context: Context,
 			timeStates: List<List<String>>): List<Double>
 	{
 		val products = DoubleArray(usages.size, {.0})
-		for (i in 0..usages.size - 1)
+		for (i in 0 until usages.size)
 		{
 			try
 			{
 				val usage = usages[i]
-				if (timeStates[i].size == 0 || timeStates[i][0] == "-1")
+				if (timeStates[i].isEmpty() || timeStates[i][0] == "-1")
 				{
 					// Core is off?
 					continue
