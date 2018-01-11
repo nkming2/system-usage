@@ -2,6 +2,7 @@ package com.nkming.sysusage
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -130,7 +131,15 @@ class Preference(context: Context, pref: SharedPreferences)
 	var isEnableCpu: Boolean
 		get()
 		{
-			return _pref.getBoolean(_enableCpuNotifKey, true)
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				// Not supported
+				return false
+			}
+			else
+			{
+				return _pref.getBoolean(_enableCpuNotifKey, true)
+			}
 		}
 		set(v)
 		{

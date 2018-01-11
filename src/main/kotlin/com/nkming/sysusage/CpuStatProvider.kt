@@ -93,6 +93,7 @@ class CpuStatProvider(context: Context,
 	{
 		private val LOG_TAG = CpuStatProvider::class.java.canonicalName
 
+		// this script won't work on O+ as /proc/stat is no longer accessible
 		private val UPDATE_SCRIPT = listOf(
 				"update()",
 				"{",
@@ -112,8 +113,8 @@ class CpuStatProvider(context: Context,
 				"	done",
 				"	cat /proc/stat || return 1",
 				"}",
-				"update",
-				"echo \":)\"")
+				"update && echo \":)\"",
+				"echo \":(\"")
 	}
 
 	var onStatUpdate = onStatUpdate

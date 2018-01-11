@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceGroup
 import android.provider.Settings
 import android.view.View
 import android.widget.TextView
@@ -84,10 +85,29 @@ class PreferenceFragment : PreferenceFragmentEx(),
 
 	private fun init()
 	{
+		initCpuPref()
 		initIntervalMulPref()
 		initPriorityPref()
 		initLockScreenPref()
 		initAbout()
+	}
+
+	private fun initCpuPref()
+	{
+		val group = preferenceScreen.findPreference(getString(
+				R.string.pref_cpu_notification_category_key)) as PreferenceGroup
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			group.removePreference(findPreference(getString(
+					R.string.pref_enable_cpu_notif_key)))
+			group.removePreference(findPreference(getString(
+					R.string.pref_overall_cpu_key)))
+		}
+		else
+		{
+			group.removePreference(findPreference(getString(
+					R.string.pref_cpu_compat_note_key)))
+		}
 	}
 
 	private fun initPriorityPref()
