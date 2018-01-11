@@ -300,7 +300,8 @@ class CpuStatProvider(context: Context,
 				val usage = usages[i]
 				if (timeStates[i].isEmpty() || timeStates[i][0] == "-1")
 				{
-					// Core is off?
+					// Core is off or we can't read the file
+					products[i] = usage
 					continue
 				}
 
