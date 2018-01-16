@@ -53,19 +53,4 @@
 		android:layout_height="wrap_content"
 		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 		android:paddingBottom="4dp" />
-
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-		android:paddingTop="4dp"
-		android:textColor="?colorAccent"
-		android:text="Normalized Usage" />
-
-	<TextView
-		android:id="@+id/normalized_usage"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-		android:paddingBottom="4dp" />
 </LinearLayout>

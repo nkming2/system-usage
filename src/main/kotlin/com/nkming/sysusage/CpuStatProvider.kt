@@ -5,12 +5,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.nkming.utils.Log
 import com.nkming.utils.type.ext.sumByLong
-import java.util.*
 
 data class CpuCoreStat(
 	val isOnline: Boolean,
-	val usage: Double,
-	val normalizedUsage: Double)
+	val usage: Double)
 	: Parcelable
 {
 	companion object
@@ -21,7 +19,6 @@ data class CpuCoreStat(
 			override fun createFromParcel(source: Parcel): CpuCoreStat
 			{
 				return CpuCoreStat((source.readInt() != 0),
-						source.readDouble(),
 						source.readDouble())
 			}
 
@@ -38,18 +35,16 @@ data class CpuCoreStat(
 	{
 		dest.writeInt(if (isOnline) 1 else 0)
 		dest.writeDouble(usage)
-		dest.writeDouble(normalizedUsage)
 	}
 }
 
 data class MutableCpuCoreStat(
 	var isOnline: Boolean,
-	var usage: Double,
-	var normalizedUsage: Double)
+	var usage: Double)
 {
 	fun immutable(): CpuCoreStat
 	{
-		return CpuCoreStat(isOnline, usage, normalizedUsage)
+		return CpuCoreStat(isOnline, usage)
 	}
 }
 
@@ -111,10 +106,9 @@ class CpuStatProvider(context: Context,
 				"		echo \":)\"",
 				"		i=\$((i+1))",
 				"	done",
-				"	cat /proc/stat || return 1",
+				"	cat /proc/stat || echo \":(\"",
 				"}",
-				"update && echo \":)\"",
-				"echo \":(\"")
+				"update")
 	}
 
 	var onStatUpdate = onStatUpdate
@@ -171,22 +165,34 @@ class CpuStatProvider(context: Context,
 		{
 			Log.w("$LOG_TAG.onCommandOutput", "Failed while parsing output", e)
 			// Should we return something else?
-			onStatUpdate?.invoke(CpuStat(listOf(CpuCoreStat(true, .0, .0))))
+			onStatUpdate?.invoke(CpuStat(listOf(CpuCoreStat(true, .0))))
 		}
 	}
 
 	private fun parseCommandOutput(online: String, present: String,
-			timeStates: List<List<String>>, stats: List<String>): CpuStat
+			timeInStates: List<List<String>>, stats: List<String>): CpuStat
 	{
+		if (!::_usageProvider.isInitialized)
+		{
+			_usageProvider = if (stats.firstOrNull() != ":(")
+			{
+				// Pre Oreo where /proc/stat was freely accessible
+				CoreUsageProviderJb()
+			}
+			else
+			{
+				CoreUsageProviderO()
+			}
+		}
+
 		val count = parseCoreCountOutput(present)
 		val isOnlines = parseCoreOnlineOutput(count, online)
-		val usages = parseCoreStatOutput(count, stats)
-		val normalizedUsages = normalizeCpuUsages(usages, timeStates)
+		val usages = _usageProvider.parse(count, stats, timeInStates)
 
 		val cores = ArrayList<CpuCoreStat>(count)
 		for (i in 0 until count)
 		{
-			cores += CpuCoreStat(isOnlines[i], usages[i], normalizedUsages[i])
+			cores += CpuCoreStat(isOnlines[i], usages[i])
 		}
 		return CpuStat(cores)
 	}
@@ -219,158 +225,252 @@ class CpuStatProvider(context: Context,
 		return products.toList()
 	}
 
-	private fun parseCoreStatOutput(count: Int, stats: List<String>)
-			: List<Double>
+	private val _context: Context = context
+	private var _isReady = false
+	private lateinit var _usageProvider: CoreUsageProvider
+}
+
+private interface CoreUsageProvider
+{
+	companion object
 	{
-		// See: https://linux.die.net/man/5/proc
-		if (_prevStats == null)
+		private val LOG_TAG = CoreUsageProvider::class.java.canonicalName
+	}
+
+	fun parse(count: Int, stats: List<String>, timeInStates: List<List<String>>)
+			: List<Double>
+
+	fun parseTimeInStatesOutput(timeInStates: List<String>)
+			: Array<Pair<Long, Long>>?
+	{
+		/*
+		 * time_in_state
+		 * This gives the amount of time spent in each of the frequencies supported by
+		 * this CPU. The cat output will have "<frequency> <time>" pair in each line, which
+		 * will mean this CPU spent <time> usertime units of time at <frequency>. Output
+		 * will have one line for each of the supported frequencies. usertime units here
+		 * is 10mS (similar to other time exported in /proc).
+		 * See: https://android.googlesource.com/kernel/common/+/android-3.18/Documentation/cpu-freq/cpufreq-stats.txt
+		 */
+		try
 		{
-			_prevStats = Array(count, {LongArray(10, {0L})})
-			_prevTimeStates = Array(count, {null})
+			if (timeInStates.isEmpty() || timeInStates[0] == "-1")
+			{
+				// Core is off or we can't read the file
+				return null
+			}
+
+			return timeInStates.map{
+				val tLong = it.split(" ").map{it.toLong()}
+				return@map Pair(tLong[0], tLong[1])
+			}.toTypedArray()
 		}
-		val products = DoubleArray(count, {.0})
+		catch (e: NumberFormatException)
+		{
+			Log.d("$LOG_TAG.parseTimeInStatesOutput", "Failed while toLong()", e)
+			return null
+		}
+		catch (e: Exception)
+		{
+			// #1, not sure why, but at least stop it from crashing first
+			Log.e("$LOG_TAG.parseTimeInStatesOutput",
+					timeInStates.joinToString("\n"), e)
+			return null
+		}
+	}
+}
+
+/**
+ * Calculate core usage from /proc/stat and weight it with time_in_state
+ */
+private class CoreUsageProviderJb : CoreUsageProvider
+{
+	override fun parse(count: Int, stats: List<String>,
+			timeInStates: List<List<String>>): List<Double>
+	{
+		if (!::_prevStats.isInitialized)
+		{
+			_prevStats = Array(count, {LongArray(10)})
+			_prevUsages = DoubleArray(count)
+			_prevTimeInStates = Array(count, {null})
+		}
+
+		val usages = parseStats(count, stats)
+		return normalizeCpuUsages(usages, timeInStates)
+	}
+
+	private fun parseStats(count: Int, stats: List<String>): List<Double>
+	{
+		val products = DoubleArray(count)
 		for (s in stats)
 		{
-			val statAry = s.split(" ").filter{it.isNotEmpty()}
-			if (!statAry[0].startsWith("cpu") || statAry[0] == "cpu")
+			val statList = s.split(" ").filter{it.isNotEmpty()}
+			if (statList.isEmpty() || !statList[0].startsWith("cpu")
+					|| statList[0] == "cpu")
 			{
+				// Unrelated stuff
 				continue
 			}
-			if (statAry.size < 5)
+			if (statList.size < 5)
 			{
 				// At least we could catch it in console if we throw instead of
 				// just logging
 				throw IllegalArgumentException("Unknown /proc/stat output: $s")
 			}
-			val core = statAry[0].substring(3).toInt()
+			val core = statList[0].substring(3).toInt()
 
-			// Somehow /proc/stat could return a smaller number which is wrong
-			// See: http://stackoverflow.com/questions/27627213/proc-stat-idle-time-decreasing
-			val diffs = LongArray(statAry.size - 1, {0L})
-			val thisCoreStats = LongArray(10, {0L})
-			var isErratic = false
-			for ((i, stat) in statAry.subList(1, statAry.size).withIndex())
-			{
-				val v = stat.toLong()
-				val diff = v - _prevStats!![core][i]
-				if (diff >= 0)
-				{
-					diffs[i] = diff
-					thisCoreStats[i] = v
-				}
-				else
-				{
-					// We can't really do anything when a value is wrong...
-//					Log.v("$LOG_TAG.parseCoreStatOutput",
-//							"Erratic /proc/stat value")
-					isErratic = true
-					break
-				}
-			}
-			if (isErratic)
-			{
-				products[core] = _prevUsages?.get(core) ?: .0
-				continue
-			}
-			_prevStats!![core] = thisCoreStats
-
-			val total = diffs.sum()
-			if (total == 0L)
-			{
-				products[core] = .0
-			}
-			else
-			{
-				val idle = (if (statAry.size - 1 > 5) diffs[3] + diffs[4]
-						else diffs[3])
-				products[core] = 1 - (idle.toDouble() / total)
-			}
+			val usage = parseSingleStat(core, statList)
+			products[core] = if (usage < 0) _prevUsages[core] else usage
 		}
 		_prevUsages = products
 		return products.toList()
 	}
 
-	private fun normalizeCpuUsages(usages: List<Double>,
-			timeStates: List<List<String>>): List<Double>
+	/**
+	 * Return core usage of a single core
+	 *
+	 * @param core Which core
+	 * @param statList Output of /proc/stat
+	 * @return Core usage, or <0 if error
+	 */
+	private fun parseSingleStat(core:Int, statList: List<String>): Double
 	{
-		val products = DoubleArray(usages.size, {.0})
-		for (i in 0 until usages.size)
+		val statVals = statList.subList(1, statList.size).map{it.toLong()}
+				.toLongArray()
+		val diffs = statVals.zip(_prevStats[core]).map{it.first - it.second}
+		// Somehow /proc/stat could return a smaller number which is wrong
+		// See: http://stackoverflow.com/questions/27627213/proc-stat-idle-time-decreasing
+		if (diffs.any{it < 0})
 		{
-			try
-			{
-				val usage = usages[i]
-				if (timeStates[i].isEmpty() || timeStates[i][0] == "-1")
-				{
-					// Core is off or we can't read the file
-					products[i] = usage
-					continue
-				}
+			return -1.0
+		}
+		_prevStats[core] = statVals
 
-				val parsedTimeStates = Array(timeStates[i].size, {Pair(0L, 0L)})
-				for ((j, t) in timeStates[i].withIndex())
-				{
-					val tLong = t.split(" ").map{it.toLong()}
-					parsedTimeStates[j] = Pair(tLong[0], tLong[1])
-				}
-				products[i] = usage * getFreqWeighting(i, parsedTimeStates)
-			}
-			catch (e: NumberFormatException)
-			{
-				// Core is off?
-				//Log.v("$LOG_TAG.normalizeCpuUsages", "Failed while toInt()", e)
-			}
-			catch (e: Exception)
-			{
-				// #1, not sure why, but at least stop it from crashing first
-				Log.e("$LOG_TAG.normalizeCpuUsages",
-						timeStates[i].joinToString("\n"), e)
-			}
-		}
-		return products.toList()
-	}
-
-	private fun getFreqWeighting(core: Int,
-			parsedTimeStates: Array<Pair<Long, Long>>): Double
-	{
-		if (_prevTimeStates!![core] == null)
+		val total = diffs.sum()
+		return if (total == 0L)
 		{
-			_prevTimeStates!![core] = parsedTimeStates
-			return .0
-		}
-		val diffs_ = ArrayList<Long>(parsedTimeStates.size)
-		for ((prev, cur) in _prevTimeStates!![core]!!.zip(parsedTimeStates))
-		{
-			diffs_.add(cur.second - prev.second)
-		}
-		val total: Long
-		val diffs: List<Long>
-		if (diffs_.any{it < 0})
-		{
-			// Stat has been reset
-			total = parsedTimeStates.sumByLong{it.second}
-			diffs = parsedTimeStates.map{it.second}
+			.0
 		}
 		else
 		{
-			total = diffs_.sum()
-			diffs = diffs_
+			val idle = (if (statVals.size >= 5) diffs[3] + diffs[4]
+					else diffs[3])
+			1.0 - (idle.toDouble() / total)
 		}
-
-		var factor = .0
-		for ((i, d) in diffs.withIndex())
-		{
-			val freqRatio = (parsedTimeStates[i].first.toDouble()
-					/ parsedTimeStates.last().first)
-			val timeRatio = d.toDouble() / total
-			factor += freqRatio * timeRatio
-		}
-		_prevTimeStates!![core] = parsedTimeStates
-		return factor
 	}
 
-	private val _context: Context = context
-	private var _isReady = false
-	private var _prevStats: Array<LongArray>? = null
-	private var _prevUsages: DoubleArray? = null
-	private var _prevTimeStates: Array<Array<Pair<Long, Long>>?>? = null
+	private fun normalizeCpuUsages(usages: List<Double>,
+			timeInStates: List<List<String>>): List<Double>
+	{
+		return (0 until usages.size).map{
+			val usage = usages[it]
+			val timeInStatesResult = parseTimeInStatesOutput(timeInStates[it])
+			return@map if (timeInStatesResult == null ) usage else
+					usage * getFreqWeighting(it, timeInStatesResult)
+		}
+	}
+
+	private fun getFreqWeighting(core: Int,
+			parsedTimeInStates: Array<Pair<Long, Long>>): Double
+	{
+		if (_prevTimeInStates[core] == null)
+		{
+			_prevTimeInStates[core] = parsedTimeInStates
+			return .0
+		}
+
+		val cpuTime_ = parsedTimeInStates.zip(_prevTimeInStates[core]!!).map{
+			Pair(it.first.first, it.first.second - it.second.second)
+		}
+		val cpuTime = if (cpuTime_.any{it.second < 0})
+		{
+			// Stat has been reset
+			parsedTimeInStates.toList()
+		}
+		else
+		{
+			cpuTime_
+		}
+		val totaCpuTime = cpuTime.sumByLong{it.second}
+
+		val maxFreq = parsedTimeInStates.last().first
+		val weights = cpuTime.map{
+			val freqRatio = it.first.toDouble() / maxFreq
+			val timeRatio = it.second.toDouble() / totaCpuTime
+			return@map freqRatio * timeRatio
+		}
+		_prevTimeInStates[core] = parsedTimeInStates
+		return weights.sum()
+	}
+
+	private lateinit var _prevStats: Array<LongArray>
+	private lateinit var _prevUsages: DoubleArray
+	private lateinit var _prevTimeInStates: Array<Array<Pair<Long, Long>>?>
+}
+
+/**
+ * Calculate core usage from time_in_state alone. This is to workaround an
+ * inaccessible /proc/stat
+ */
+private class CoreUsageProviderO : CoreUsageProvider
+{
+	override fun parse(count: Int, stats: List<String>,
+			timeInStates: List<List<String>>): List<Double>
+	{
+		if (!::_prevTimeInStates.isInitialized)
+		{
+			_prevTimeInStates = Array(count, {null})
+			_prevUsages = (0 until count).map{.0}
+			_prevTime = System.currentTimeMillis()
+			// We need dt to work correctly
+			return (0 until count).map{.0}
+		}
+
+		val now = System.currentTimeMillis()
+		val dt = now - _prevTime
+		_prevTime = now
+		val usages = timeInStates.withIndex().map{parseSingle(dt, it.index,
+				it.value)}
+		_prevUsages = usages
+		return usages
+	}
+
+	private fun parseSingle(dt: Long, core: Int, timeInState: List<String>)
+			: Double
+	{
+		val timeInStatesResult = parseTimeInStatesOutput(timeInState)
+		timeInStatesResult ?: return -1.0
+		if (_prevTimeInStates[core] == null)
+		{
+			_prevTimeInStates[core] = timeInStatesResult
+			return .0
+		}
+
+		val cpuTime_ = timeInStatesResult.zip(_prevTimeInStates[core]!!).map{
+			// Unit is 10ms
+			Pair(it.first.first, (it.first.second - it.second.second) * 10)
+		}
+		val cpuTime = if (cpuTime_.any{it.second < 0})
+		{
+			// Stat has been reset
+			timeInStatesResult.map{Pair(it.first, it.second * 10)}
+		}
+		else
+		{
+			cpuTime_
+		}
+
+		val maxFreq = timeInStatesResult.last().first
+		val weightedCpuTime = cpuTime.map{
+			val freqRatio = it.first.toDouble() / maxFreq
+			return@map it.second * freqRatio
+		}
+		val weightedCpuTimeTotal = weightedCpuTime.sum()
+		_prevTimeInStates[core] = timeInStatesResult
+		return weightedCpuTimeTotal / dt
+	}
+
+	private var _prevTime = 0L
+	private lateinit var _prevTimeInStates: Array<Array<Pair<Long, Long>>?>
+	private lateinit var _prevUsages: List<Double>
 }

@@ -79,7 +79,7 @@ class CpuStatService : BaseStatService()
 		val cores = ArrayList<MutableCpuCoreStat>(buffer[0].cores.size)
 		for (i in 0..buffer[0].cores.size - 1)
 		{
-			cores += MutableCpuCoreStat(false, .0, .0)
+			cores += MutableCpuCoreStat(false, .0)
 		}
 		for (b in buffer)
 		{
@@ -87,7 +87,6 @@ class CpuStatService : BaseStatService()
 			{
 				c.isOnline = c.isOnline || bc.isOnline
 				c.usage += bc.usage / buffer.size
-				c.normalizedUsage += bc.normalizedUsage / buffer.size
 			}
 		}
 		return CpuStat(cores.map{it.immutable()})

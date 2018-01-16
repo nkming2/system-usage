@@ -55,17 +55,13 @@ class DevFragment : FragmentEx()
 
 		val statusBuilder = StringBuilder()
 		val usageBuilder = StringBuilder()
-		val normalizedUsageBuilder = StringBuilder()
 		for (c in stat.cores)
 		{
 			statusBuilder.append(if (c.isOnline) "O" else "X")
 			usageBuilder.append("${(c.usage * 100).toInt()}% ")
-			normalizedUsageBuilder.append(
-					"${(c.normalizedUsage * 100).toInt()}% ")
 		}
 		_status.text = statusBuilder.toString()
 		_usage.text = usageBuilder.toString()
-		_normalizedUsage.text = normalizedUsageBuilder.toString()
 	}
 
 	private val _statAvailableReceiver = object: BroadcastReceiver()
@@ -83,5 +79,4 @@ class DevFragment : FragmentEx()
 	private val _count by lazyView<TextView>(R.id.count)
 	private val _status by lazyView<TextView>(R.id.status)
 	private val _usage by lazyView<TextView>(R.id.usage)
-	private val _normalizedUsage by lazyView<TextView>(R.id.normalized_usage)
 }

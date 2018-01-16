@@ -39,7 +39,7 @@ class CpuNotifBuilder(context: Context, channelId: String)
 		var onlineCount = 0
 		for (c in stat.cores)
 		{
-			val level = c.normalizedUsage * 100
+			val level = c.usage * 100
 			overallLevel += level / stat.cores.size
 			if (c.isOnline)
 			{
@@ -88,7 +88,7 @@ class CpuNotifBuilder(context: Context, channelId: String)
 		val product = ArrayList<Notification>(4)
 		for ((i, c) in stat.cores.withIndex())
 		{
-			val level = (c.normalizedUsage * 100).toInt()
+			val level = (c.usage * 100).toInt()
 			product += buildIndividualNotif(i, c.isOnline, level, when_ - i)
 		}
 		return product

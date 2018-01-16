@@ -96,17 +96,10 @@ class PreferenceFragment : PreferenceFragmentEx(),
 	{
 		val group = preferenceScreen.findPreference(getString(
 				R.string.pref_cpu_notification_category_key)) as PreferenceGroup
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
 		{
 			group.removePreference(findPreference(getString(
-					R.string.pref_enable_cpu_notif_key)))
-			group.removePreference(findPreference(getString(
-					R.string.pref_overall_cpu_key)))
-		}
-		else
-		{
-			group.removePreference(findPreference(getString(
-					R.string.pref_cpu_compat_note_key)))
+					R.string.pref_cpu_oreo_note_key)))
 		}
 	}
 

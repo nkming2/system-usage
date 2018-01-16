@@ -1,6 +1,5 @@
 package com.nkming.sysusage
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.SwitchCompat
@@ -13,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
 import com.nkming.utils.Log
 import com.nkming.utils.app.FragmentEx
 import com.nkming.utils.unit.DimensionUtils
@@ -226,12 +224,6 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		{
 			startEnterTransition(_normalTransitViews, {enableInputs()})
 		}
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			_cpu.isEnabled = false
-			_cpuCompatNote.visibility = View.VISIBLE
-		}
 	}
 
 	override fun onBackPressed(): Boolean
@@ -310,17 +302,8 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 	private val _mem by lazyView<SwitchCompat>(R.id.mem_switch)
 	private val _net by lazyView<SwitchCompat>(R.id.net_switch)
 	private val _disk by lazyView<SwitchCompat>(R.id.disk_switch)
-	private val _cpuCompatNote by lazyView<TextView>(R.id.cpu_compat_note)
-	private val _normalTransitViews by viewAwareLazy{
-		return@viewAwareLazy if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			listOf(_cpu, _cpuCompatNote, _mem, _net, _disk)
-		}
-		else
-		{
-			listOf(_cpu, _mem, _net, _disk)
-		}
-	}
+	private val _normalTransitViews by viewAwareLazy{listOf(_cpu, _mem, _net,
+			_disk)}
 	private val _doneTransitViews by viewAwareLazy{
 		return@viewAwareLazy if (_pref.isEnableNet || _pref.isEnableDisk)
 		{
