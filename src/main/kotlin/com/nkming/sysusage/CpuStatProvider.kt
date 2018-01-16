@@ -338,13 +338,13 @@ private class CoreUsageProviderJb : CoreUsageProvider
 		val statVals = statList.subList(1, statList.size).map{it.toLong()}
 				.toLongArray()
 		val diffs = statVals.zip(_prevStats[core]).map{it.first - it.second}
+		_prevStats[core] = statVals
 		// Somehow /proc/stat could return a smaller number which is wrong
 		// See: http://stackoverflow.com/questions/27627213/proc-stat-idle-time-decreasing
 		if (diffs.any{it < 0})
 		{
 			return -1.0
 		}
-		_prevStats[core] = statVals
 
 		val total = diffs.sum()
 		return if (total == 0L)
