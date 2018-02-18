@@ -159,5 +159,10 @@
 				android:action="android.intent.action.VIEW"
 				android:data="@string/about_source_summary" />
 		</Preference>
+
+		<Preference
+			android:key="@string/about_translator_key"
+			android:title="@string/about_translator_title"
+			android:summary="@string/about_translator_credit" />
 	</PreferenceCategory>
 </PreferenceScreen>

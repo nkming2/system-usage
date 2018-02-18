@@ -148,6 +148,21 @@ class PreferenceFragment : PreferenceFragmentEx(),
 	{
 		val aboutVersion = findPreference(getString(R.string.about_version_key))
 		aboutVersion.summary = BuildConfig.VERSION_NAME
+
+		if (getString(R.string.about_translator_credit).isEmpty())
+		{
+			val aboutTranslator = findPreference(getString(
+					R.string.about_translator_key))
+			aboutTranslator.summary = getString(R.string.about_translator_help)
+			aboutTranslator.onPreferenceClickListener =
+					android.preference.Preference.OnPreferenceClickListener{
+						val i = Intent(Intent.ACTION_VIEW)
+						i.data = Uri.parse(getString(
+								R.string.about_translator_help_url))
+						startActivity(i)
+						return@OnPreferenceClickListener true
+					}
+		}
 	}
 
 	private fun onEnableCpuNotifChange(v: Boolean)
