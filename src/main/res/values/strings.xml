@@ -76,7 +76,7 @@
 
 	<string name="pref_lock_screen_key" translatable="false">lock_screen</string>
 	<string name="pref_lock_screen_title">Adjust visibility on lock screen</string>
-	<string name="pref_lock_screen_summary">You could disable the notifications being shown on lock screen in Android Settings</string>
+	<string name="pref_lock_screen_summary">You could disable the notifications from being shown on lock screen in Android Settings</string>
 
 	<string name="pref_optimize_battery_key" translatable="false">optimize_battery</string>
 	<string name="pref_optimize_battery_title">Optimize battery usage</string>
