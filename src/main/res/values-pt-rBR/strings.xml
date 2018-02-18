@@ -1,0 +1,127 @@
+<resources>
+	<string name="app_name">System Usage</string>
+	<string name="app_pref_name">System Usage</string>
+
+	<string name="sh_failed">Falha ao executar o comando do shell</string>
+
+	<string name="notif_loading">Obtendo estatísticas do sistema…</string>
+
+	<string name="cpu_notif_title_overall" formatted="false">CPU: %d%%</string>
+	<string name="cpu_notif_content_overall" formatted="false">%d de %d núcleos habilitados</string>
+	<string name="cpu_notif_title" formatted="false">Núcleo %d: %d%%</string>
+	<string name="cpu_notif_title_disabled" formatted="false">Núcleo %d desativado</string>
+
+	<string name="mem_notif_title" formatted="false">Memória: %d%%</string>
+	<string name="mem_notif_content" formatted="false">%d MB em uso, %d MB restantes</string>
+
+	<string name="net_tx_notif_title" formatted="false">Saída: %d%%</string>
+	<string name="net_rx_notif_title" formatted="false">Entrada: %d%%</string>
+	<string name="net_notif_title_disabled" formatted="false">Rede não disponível</string>
+
+	<string name="disk_read_notif_title" formatted="false">Leitura em Disco: %d%%</string>
+	<string name="disk_write_notif_title" formatted="false">Gravação em Disco: %d%%</string>
+
+	<string name="notif_usage_channel_name">Indicador de Uso</string>
+	<string name="notif_usage_channel_description">Mostrar o uso atual do sistema</string>
+
+	<string name="setup_wizard_greeting_message">Prazer em conhecê-lo &#x263a;</string>
+	<string name="setup_wizard_greeting_detail_message">Nós o ajudaremos a configurar este aplicativo para suas necessidades</string>
+	<string name="setup_wizard_greeting_theme_switch">Tema dark</string>
+
+	<string name="setup_wizard_monitor_message">Selecione o que mostrar</string>
+	<string name="setup_wizard_monitor_cpu_switch">CPU</string>
+	<string name="setup_wizard_monitor_mem_switch">Memória</string>
+	<string name="setup_wizard_monitor_net_switch">Rede</string>
+	<string name="setup_wizard_monitor_disk_switch">Disco</string>
+
+	<string name="setup_wizard_net_mobile_message">Adaptação à sua rede de dados</string>
+	<string name="setup_wizard_net_mobile_detail_message">Para obter um uso preciso, selecione e ajuste o valor para melhor descrever sua capacidade de rede de dados móveis</string>
+	<string name="setup_wizard_net_wifi_message">Adaptar a sua rede Wi-Fi</string>
+	<string name="setup_wizard_net_wifi_detail_message">Para obter um uso preciso, ajuste o valor para melhor descrever sua capacidade de rede Wi-Fi</string>
+	<string name="setup_wizard_net_dl_label">Entrada</string>
+	<string name="setup_wizard_net_ul_label">Saída</string>
+
+	<string name="setup_wizard_disk_message">Adapte ao seu armazenamento</string>
+	<string name="setup_wizard_disk_detail_message">Para obter uma figura de uso precisa, ajuste o valor para melhor descrever sua capacidade de leitura/gravação de armazenamento</string>
+	<string name="setup_wizard_disk_read_label">Ler</string>
+	<string name="setup_wizard_disk_write_label">Escrever</string>
+
+	<string name="setup_wizard_done_message">Concluído!</string>
+
+	<string name="pref_run_setup_wizard_key">run_setup_wizard</string>
+	<string name="pref_last_version_key">last_version</string>
+
+	<string name="pref_cpu_notification_category_key">cpu_notification</string>
+	<string name="pref_cpu_notification_category">Notificação da CPU</string>
+	<string name="pref_mem_notification_category">Notificação da Memória</string>
+	<string name="pref_net_notification_category">Notificação da Rede</string>
+	<string name="pref_disk_notification_category">Notificação de I/O de Disco</string>
+	<string name="pref_misc_category">Diversos</string>
+
+	<string name="pref_interval_mul_title">Intervalo de atualização</string>
+
+	<string name="pref_enable_title">Habilitar</string>
+
+	<string name="pref_high_priority_title">Prioridade máxima</string>
+	<string name="pref_high_priority_summary_on">As notificações de alta prioridade mostrariam primeiro</string>
+	<string name="pref_high_priority_summary_off">As notificações de baixa prioridade mostrariam o último</string>
+
+	<string name="pref_autorun_title">Iniciar altomaticamente no boot</string>
+
+	<string name="pref_lock_screen_title">Ajuste a visibilidade na tela de bloqueio</string>
+	<string name="pref_lock_screen_summary">Você pode desativar as notificações exibidas na tela de bloqueio nas Configurações do Android</string>
+
+	<string name="pref_optimize_battery_title">Otimizar o uso da bateria</string>
+	<string name="pref_optimize_battery_summary">Desligar o aplicativo quando a tela do dispositivo for desligada, É recomendado manter habilitado, a menos que coisas estranhas aconteçam</string>
+
+	<string name="pref_enable_cpu_notif_title">Habilitar</string>
+
+	<string name="pref_overall_cpu_title">Mostrar estatísticas gerais</string>
+	<string name="pref_overall_cpu_summary_on">Mostrando uma única estatística combinada</string>
+	<string name="pref_overall_cpu_summary_off">Mostrando estatísticas múltiplas para cada núcleo</string>
+
+	<string name="pref_cpu_oreo_note_title">Nota de compatibilidade</string>
+	<string name="pref_cpu_oreo_note_summary">As informações de uso da CPU têm precisão limitada no Android 8.0+, pois alguns recursos do sistema necessários não são mais acessíveis</string>
+
+	<string name="pref_enable_mem_notif_title">Habilitar</string>
+
+	<string name="pref_enable_net_notif_title">Habilitar</string>
+
+	<string name="pref_net_mobile_template_title">Modelo de rede móvel</string>
+	<string name="pref_net_mobile_template_summary">Aplique ajustes predefinidos para a rede móvel. No entanto capacidades reais dependem da operadora e do plano de dados. Ajuste os valores abaixo para melhor representar o seu</string>
+
+	<string name="pref_net_mobile_dl_title">Capacidade de download móvel</string>
+
+	<string name="pref_net_mobile_ul_title">Capacidade de upload móvel</string>
+
+	<string name="pref_net_wifi_dl_title">Capacidade de download Wi-Fi</string>
+
+	<string name="pref_net_wifi_ul_title">Capacidade de upload Wi-Fi</string>
+
+	<string-array name="pref_net_throughput_units">
+		<item>kbit/s</item>
+		<item>Mbit/s</item>
+	</string-array>
+
+	<string name="pref_enable_disk_notif_title">Habilitar</string>
+
+	<string name="pref_disk_read_title">Capacidade de leitura em disco</string>
+
+	<string name="pref_disk_write_title">Capacidade de gravação em disco</string>
+
+	<string-array name="pref_disk_throughput_units">
+		<item>KByte/s</item>
+		<item>MByte/s</item>
+	</string-array>
+
+	<string name="pref_dark_theme_title">Tema preto</string>
+	<string name="pref_dark_theme_summary_on">Usando o tema preto</string>
+	<string name="pref_dark_theme_summary_off">Usando o tema leve</string>
+
+	<string name="pref_about_category">Sobre</string>
+	<string name="about_version_title">Versão</string>
+	<string name="about_source_title">Código fonte</string>
+
+	<string name="about_translator_title">Tradutor</string>
+	<string name="about_translator_credit">Lucas K.</string>
+</resources>
