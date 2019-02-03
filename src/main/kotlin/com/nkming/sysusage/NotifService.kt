@@ -7,9 +7,9 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.*
 import android.os.Build
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.LocalBroadcastManager
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.nkming.utils.Log
 
 class NotifService : Service(),
@@ -423,7 +423,7 @@ class NotifService : Service(),
 					else NotificationCompat.PRIORITY_LOW
 		}
 
-	private val _broadcastManager by lazy{ LocalBroadcastManager.getInstance(this)}
+	private val _broadcastManager by lazy{LocalBroadcastManager.getInstance(this)}
 	private val _notifManager by lazy{getSystemService(
 			Context.NOTIFICATION_SERVICE) as NotificationManager}
 	private val _pref by lazy{Preference.from(this)}

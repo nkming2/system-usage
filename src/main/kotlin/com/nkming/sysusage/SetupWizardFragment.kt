@@ -2,7 +2,6 @@ package com.nkming.sysusage
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.SwitchCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.widget.SwitchCompat
 import com.nkming.utils.Log
 import com.nkming.utils.app.FragmentEx
 import com.nkming.utils.unit.DimensionUtils
