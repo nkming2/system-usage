@@ -1,5 +1,6 @@
 package com.nkming.sysusage
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -215,7 +216,14 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		_cpu.isChecked = _pref.isEnableCpu
 		_mem.isChecked = _pref.isEnableMem
 		_net.isChecked = _pref.isEnableNet
-		_disk.isChecked = _pref.isEnableDisk
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			_disk.visibility = View.GONE
+		}
+		else
+		{
+			_disk.isChecked = _pref.isEnableDisk
+		}
 		if (isRestoreBackstack())
 		{
 			startExitReverseTransition(_doneTransitViews, {enableInputs()})

@@ -2,6 +2,7 @@ package com.nkming.sysusage
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -220,7 +221,15 @@ class Preference(context: Context, pref: SharedPreferences)
 	var isEnableDisk: Boolean
 		get()
 		{
-			return _pref.getBoolean(_enableDiskNotifKey, true)
+			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				// Can't enable on O+
+				false
+			}
+			else
+			{
+				_pref.getBoolean(_enableDiskNotifKey, true)
+			}
 		}
 		set(v)
 		{

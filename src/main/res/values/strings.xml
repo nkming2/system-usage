@@ -57,6 +57,7 @@
 	<string name="pref_cpu_notification_category">CPU Notification</string>
 	<string name="pref_mem_notification_category">Memory Notification</string>
 	<string name="pref_net_notification_category">Network Notification</string>
+	<string name="pref_disk_notification_category_key" translatable="false">disk_notification</string>
 	<string name="pref_disk_notification_category">Disk I/O Notification</string>
 	<string name="pref_misc_category">Misc</string>
 
@@ -143,6 +144,9 @@
 		<item>KByte/s</item>
 		<item>MByte/s</item>
 	</string-array>
+
+	<string name="pref_disk_stat_not_supported_key">disk_not_supported</string>
+	<string name="pref_disk_stat_not_supported_summary">Disk I/O stat is not available on Android 8.0 or up</string>
 
 	<string name="pref_dark_theme_key" translatable="false">dark_theme</string>
 	<string name="pref_dark_theme_title">Dark theme</string>

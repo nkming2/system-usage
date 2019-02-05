@@ -86,6 +86,7 @@ class PreferenceFragment : PreferenceFragmentEx(),
 	private fun init()
 	{
 		initCpuPref()
+		initDiskPref()
 		initIntervalMulPref()
 		initPriorityPref()
 		initLockScreenPref()
@@ -100,6 +101,34 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		{
 			group.removePreference(findPreference(getString(
 					R.string.pref_cpu_oreo_note_key)))
+		}
+	}
+
+	private fun initDiskPref()
+	{
+		val group = preferenceScreen.findPreference(getString(
+				R.string.pref_disk_notification_category_key)) as PreferenceGroup
+		val noteKey = getString(R.string.pref_disk_stat_not_supported_key)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			var i = 0
+			while (i < group.preferenceCount)
+			{
+				val p = group.getPreference(i)
+				if (p.key != noteKey)
+				{
+					group.removePreference(p)
+				}
+				else
+				{
+					p.isEnabled = false
+					++i
+				}
+			}
+		}
+		else
+		{
+			group.removePreference(findPreference(noteKey))
 		}
 	}
 
