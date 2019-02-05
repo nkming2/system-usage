@@ -53,7 +53,7 @@
 	<string name="pref_run_setup_wizard_key">run_setup_wizard</string>
 	<string name="pref_last_version_key">last_version</string>
 
-	<string name="pref_cpu_notification_category_key">cpu_notification</string>
+	<string name="pref_cpu_notification_category_key" translatable="false">cpu_notification</string>
 	<string name="pref_cpu_notification_category">CPU Notification</string>
 	<string name="pref_mem_notification_category">Memory Notification</string>
 	<string name="pref_net_notification_category">Network Notification</string>
