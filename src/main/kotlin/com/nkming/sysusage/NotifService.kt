@@ -192,6 +192,7 @@ class NotifService : Service(),
 				NotificationManager.IMPORTANCE_LOW)
 		ch.description = getString(R.string.notif_usage_channel_description)
 		ch.lockscreenVisibility = NotificationCompat.VISIBILITY_SECRET
+		ch.setShowBadge(false)
 		_notifManager.createNotificationChannel(ch)
 	}
 
