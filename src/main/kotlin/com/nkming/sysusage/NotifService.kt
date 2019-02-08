@@ -171,6 +171,7 @@ class NotifService : Service(),
 			_cpuNotifBuilder.priority = priority
 			_memNotifBuilder.priority = priority
 			_netNotifBuilder.priority = priority
+			_diskNotifBuilder.priority = priority
 		}
 		else if (key == getString(R.string.pref_enable_key))
 		{
