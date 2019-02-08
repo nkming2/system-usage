@@ -42,6 +42,8 @@ class NotifService : Service(),
 				IntentFilter(Res.ACTION_NET_STAT_AVAILABLE))
 		_broadcastManager.registerReceiver(_diskStatAvailableReceiver,
 				IntentFilter(Res.ACTION_DISK_STAT_AVAILABLE))
+		_broadcastManager.registerReceiver(_storageStatAvailableReceiver,
+				IntentFilter(Res.ACTION_STORAGE_STAT_AVAILABLE))
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
@@ -76,6 +78,10 @@ class NotifService : Service(),
 				{
 					enableDisk()
 				}
+				if (_pref.isEnableStorage)
+				{
+					enableStorage()
+				}
 			}
 
 			stopIfDisabled()
@@ -108,6 +114,10 @@ class NotifService : Service(),
 		if (_isEnableDisk)
 		{
 			DiskStatService.unplug(this)
+		}
+		if (_isEnableStorage)
+		{
+			StorageStatService.unplug(this)
 		}
 
 		_pref.onSharedPreferenceChangeListener = null
@@ -159,6 +169,17 @@ class NotifService : Service(),
 				disableDisk()
 			}
 		}
+		else if (key == getString(R.string.pref_enable_storage_notif_key))
+		{
+			if (pref.getBoolean(key, true))
+			{
+				enableStorage()
+			}
+			else
+			{
+				disableStorage()
+			}
+		}
 		else if (key == getString(R.string.pref_overall_cpu_key))
 		{
 			_cpuNotifBuilder.isOverall = pref.getBoolean(key, true)
@@ -172,6 +193,7 @@ class NotifService : Service(),
 			_memNotifBuilder.priority = priority
 			_netNotifBuilder.priority = priority
 			_diskNotifBuilder.priority = priority
+			_storageNotifBuilder.priority = priority
 		}
 		else if (key == getString(R.string.pref_enable_key))
 		{
@@ -181,6 +203,7 @@ class NotifService : Service(),
 				disableMem()
 				disableNet()
 				disableDisk()
+				disableStorage()
 			}
 		}
 	}
@@ -221,12 +244,19 @@ class NotifService : Service(),
 		postStatAvailable()
 	}
 
+	private fun onStatAvailable(stat: StorageStat)
+	{
+		_storageStat = stat
+		postStatAvailable()
+	}
+
 	private fun postStatAvailable()
 	{
 		if ((!_isEnableCpu || _cpuStat != null)
 				&& (!_isEnableMem || _memStat != null)
 				&& (!_isEnableNet || _netStat != null)
-				&& (!_isEnableDisk || _diskStat != null))
+				&& (!_isEnableDisk || _diskStat != null)
+				&& (!_isEnableStorage || _storageStat != null))
 		{
 			val notifs = arrayListOf<Notification>()
 			if (_isEnableCpu)
@@ -253,6 +283,13 @@ class NotifService : Service(),
 						_when - 3000)
 				notifs += diskNotifs
 				_diskStat = null
+			}
+			if (_isEnableStorage)
+			{
+				val storageNotifs = _storageNotifBuilder.build(_storageStat!!,
+						_when - 4000)
+				notifs += storageNotifs
+				_storageStat = null
 			}
 
 			for ((i, n) in notifs.withIndex())
@@ -356,9 +393,31 @@ class NotifService : Service(),
 		}
 	}
 
+	private fun enableStorage()
+	{
+		Log.d(LOG_TAG, "enableStorage()")
+		if (!_isEnableStorage)
+		{
+			_isEnableStorage = true
+			StorageStatService.plug(this)
+		}
+	}
+
+	private fun disableStorage()
+	{
+		Log.d(LOG_TAG, "disableStorage()")
+		if (_isEnableStorage)
+		{
+			StorageStatService.unplug(this)
+			_isEnableStorage = false
+			stopIfDisabled()
+		}
+	}
+
 	private fun stopIfDisabled()
 	{
-		if (!_isEnableCpu && !_isEnableMem && !_isEnableNet && !_isEnableDisk)
+		if (!_isEnableCpu && !_isEnableMem && !_isEnableNet && !_isEnableDisk
+				&& !_isEnableStorage)
 		{
 			Log.d("$LOG_TAG.stopIfDisabled", "Stopping service...")
 			stopSelf()
@@ -418,6 +477,15 @@ class NotifService : Service(),
 		}
 	}
 
+	private val _storageStatAvailableReceiver = object: BroadcastReceiver()
+	{
+		override fun onReceive(context: Context, intent: Intent)
+		{
+			val stat = intent.getParcelableExtra<StorageStat>(Res.EXTRA_STAT)
+			onStatAvailable(stat)
+		}
+	}
+
 	private val _priority: Int
 		get()
 		{
@@ -463,6 +531,14 @@ class NotifService : Service(),
 	private var _diskStat: DiskStat? = null
 	private val _diskNotifBuilder by lazy{
 		val product = DiskNotifBuilder(this, CHANNEL_ID)
+		product.priority = _priority
+		product
+	}
+
+	private var _isEnableStorage = false
+	private var _storageStat: StorageStat? = null
+	private val _storageNotifBuilder by lazy{
+		val product = StorageNotifBuilder(this, CHANNEL_ID)
 		product.priority = _priority
 		product
 	}

@@ -256,6 +256,16 @@ class Preference(context: Context, pref: SharedPreferences)
 			_edit.putLong(_diskWriteKey, v)
 		}
 
+	var isEnableStorage: Boolean
+		get()
+		{
+			return _pref.getBoolean(_enableStorageNotifKey, true)
+		}
+		set(v)
+		{
+			_edit.putBoolean(_enableStorageNotifKey, v)
+		}
+
 	var isDarkTheme: Boolean
 		get()
 		{
@@ -308,6 +318,9 @@ class Preference(context: Context, pref: SharedPreferences)
 			R.string.pref_disk_read_key)}
 	private val _diskWriteKey by lazy{_context.getString(
 			R.string.pref_disk_write_key)}
+
+	private val _enableStorageNotifKey by lazy{_context.getString(
+			R.string.pref_enable_storage_notif_key)}
 
 	private val _darkThemeKey by lazy{_context.getString(
 			R.string.pref_dark_theme_key)}

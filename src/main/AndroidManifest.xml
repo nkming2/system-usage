@@ -50,6 +50,10 @@
 			android:exported="false" />
 
 		<service
+			android:name=".StorageStatService"
+			android:exported="false" />
+
+		<service
 			android:name=".NotifService"
 			android:exported="false" />
 

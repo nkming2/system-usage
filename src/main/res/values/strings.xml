@@ -21,6 +21,10 @@
 	<string name="disk_read_notif_title" formatted="false">Disk read: %d%%</string>
 	<string name="disk_write_notif_title" formatted="false">Disk write: %d%%</string>
 
+	<string name="storage_notif_title" formatted="false">Internal storage: %d%%</string>
+	<string name="storage_notif_ext_title" formatted="false">External storage: %d%%</string>
+	<string name="storage_notif_content" formatted="false">%.1f GB in use, %.1f GB remaining</string>
+
 	<string name="notif_usage_channel_name">Usage Indicator</string>
 	<string name="notif_usage_channel_description">Show the current system usage</string>
 
@@ -59,6 +63,7 @@
 	<string name="pref_net_notification_category">Network Notification</string>
 	<string name="pref_disk_notification_category_key" translatable="false">disk_notification</string>
 	<string name="pref_disk_notification_category">Disk I/O Notification</string>
+	<string name="pref_storage_notification_category">Storage Notification</string>
 	<string name="pref_misc_category">Misc</string>
 
 	<string name="pref_interval_mul_key" translatable="false">interval_mul</string>
@@ -147,6 +152,9 @@
 
 	<string name="pref_disk_stat_not_supported_key" translatable="false">disk_not_supported</string>
 	<string name="pref_disk_stat_not_supported_summary">Disk I/O stat is not available on Android 8.0 or up</string>
+
+	<string name="pref_enable_storage_notif_key" translatable="false">enable_storage_notif</string>
+	<string name="pref_enable_storage_notif_title">Enable</string>
 
 	<string name="pref_dark_theme_key" translatable="false">dark_theme</string>
 	<string name="pref_dark_theme_title">Dark theme</string>

@@ -77,6 +77,10 @@ class PreferenceFragment : PreferenceFragmentEx(),
 		{
 			onEnableDiskNotifChange(pref.getBoolean(key, true))
 		}
+		else if (key == getString(R.string.pref_enable_storage_notif_key))
+		{
+			onEnableStorageNotifChange(pref.getBoolean(key, true))
+		}
 		else if (key == getString(R.string.pref_enable_key))
 		{
 			onEnableChange(pref.getBoolean(key, true))
@@ -234,6 +238,14 @@ class PreferenceFragment : PreferenceFragmentEx(),
 	}
 
 	private fun onEnableDiskNotifChange(v: Boolean)
+	{
+		if (v)
+		{
+			NotifService.start(activity)
+		}
+	}
+
+	private fun onEnableStorageNotifChange(v: Boolean)
 	{
 		if (v)
 		{
