@@ -102,8 +102,7 @@
 	<string name="pref_overall_cpu_summary_off">Showing multiple stats for each core</string>
 
 	<string name="pref_cpu_oreo_note_key" translatable="false">cpu_oreo_note</string>
-	<string name="pref_cpu_oreo_note_title">Compatibility note</string>
-	<string name="pref_cpu_oreo_note_summary">CPU usage info has limited accuracy on Android 8.0+ as some system resources needed are no longer accessible</string>
+	<string name="pref_cpu_oreo_note_summary">Limited accuracy on Android 8.0+ as some system resources needed are no longer accessible</string>
 
 	<string name="pref_enable_mem_notif_key" translatable="false">enable_mem_notif</string>
 	<string name="pref_enable_mem_notif_title">Enable</string>
@@ -156,7 +155,7 @@
 	</string-array>
 
 	<string name="pref_disk_stat_not_supported_key" translatable="false">disk_not_supported</string>
-	<string name="pref_disk_stat_not_supported_summary">Disk I/O stat is not available on Android 8.0 or up</string>
+	<string name="pref_disk_stat_not_supported_summary">Disk I/O stat is not available on Android 8.0+</string>
 
 	<string name="pref_enable_storage_notif_key" translatable="false">enable_storage_notif</string>
 	<string name="pref_enable_storage_notif_title">Enable</string>

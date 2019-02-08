@@ -47,6 +47,13 @@
 	<PreferenceCategory
 		android:key="@string/pref_cpu_notification_category_key"
 		android:title="@string/pref_cpu_notification_category">
+
+		<Preference
+			android:key="@string/pref_cpu_oreo_note_key"
+			android:summary="@string/pref_cpu_oreo_note_summary"
+			android:enabled="false"
+			android:persistent="false" />
+
 		<com.nkming.utils.preference.SwitchPreferenceFix
 			android:key="@string/pref_enable_cpu_notif_key"
 			android:dependency="@string/pref_enable_key"
@@ -60,11 +67,6 @@
 			android:summaryOn="@string/pref_overall_cpu_summary_on"
 			android:summaryOff="@string/pref_overall_cpu_summary_off"
 			android:defaultValue="true" />
-
-		<Preference
-			android:key="@string/pref_cpu_oreo_note_key"
-			android:title="@string/pref_cpu_oreo_note_title"
-			android:summary="@string/pref_cpu_oreo_note_summary" />
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_mem_notification_category">

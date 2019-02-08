@@ -76,7 +76,6 @@
 	<string name="pref_overall_cpu_summary_on">Mostrando uma única estatística combinada</string>
 	<string name="pref_overall_cpu_summary_off">Mostrando estatísticas múltiplas para cada núcleo</string>
 
-	<string name="pref_cpu_oreo_note_title">Nota de compatibilidade</string>
 	<string name="pref_cpu_oreo_note_summary">As informações de uso da CPU têm precisão limitada no Android 8.0+, pois alguns recursos do sistema necessários não são mais acessíveis</string>
 
 	<string name="pref_enable_mem_notif_title">Habilitar</string>
