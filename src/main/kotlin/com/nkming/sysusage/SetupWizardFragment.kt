@@ -224,6 +224,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		{
 			_disk.isChecked = _pref.isEnableDisk
 		}
+		_storage.isChecked = _pref.isEnableStorage
 		if (isRestoreBackstack())
 		{
 			startExitReverseTransition(_doneTransitViews, {enableInputs()})
@@ -273,25 +274,25 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 	private fun enableInputs()
 	{
 		_cpu.setOnCheckedChangeListener{compoundButton, isChecked ->
-		run{
 			_pref.isEnableCpu = isChecked
 			_pref.apply()
-		}}
+		}
 		_mem.setOnCheckedChangeListener{compoundButton, isChecked ->
-		run{
 			_pref.isEnableMem = isChecked
 			_pref.apply()
-		}}
+		}
 		_net.setOnCheckedChangeListener{compoundButton, isChecked ->
-		run{
 			_pref.isEnableNet = isChecked
 			_pref.apply()
-		}}
+		}
 		_disk.setOnCheckedChangeListener{compoundButton, isChecked ->
-		run{
 			_pref.isEnableDisk = isChecked
 			_pref.apply()
-		}}
+		}
+		_storage.setOnCheckedChangeListener{compoundButton, isChecked ->
+			_pref.isEnableStorage = isChecked
+			_pref.apply()
+		}
 		_next.setOnClickListener{onNextClick()}
 	}
 
@@ -301,6 +302,7 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 		_mem.setOnCheckedChangeListener(null)
 		_net.setOnCheckedChangeListener(null)
 		_disk.setOnCheckedChangeListener(null)
+		_storage.setOnCheckedChangeListener(null)
 		_next.setOnClickListener(null)
 	}
 
@@ -310,8 +312,9 @@ class SetupWizardMonitorFragment : SetupWizardFragment()
 	private val _mem by lazyView<SwitchCompat>(R.id.mem_switch)
 	private val _net by lazyView<SwitchCompat>(R.id.net_switch)
 	private val _disk by lazyView<SwitchCompat>(R.id.disk_switch)
+	private val _storage by lazyView<SwitchCompat>(R.id.storage_switch)
 	private val _normalTransitViews by viewAwareLazy{listOf(_cpu, _mem, _net,
-			_disk)}
+			_disk, _storage)}
 	private val _doneTransitViews by viewAwareLazy{
 		return@viewAwareLazy if (_pref.isEnableNet || _pref.isEnableDisk)
 		{

@@ -42,6 +42,7 @@
 	<string name="setup_wizard_monitor_mem_switch">Memory</string>
 	<string name="setup_wizard_monitor_net_switch">Network</string>
 	<string name="setup_wizard_monitor_disk_switch">Disk</string>
+	<string name="setup_wizard_monitor_storage_switch">Storage</string>
 
 	<string name="setup_wizard_net_mobile_message">Tailor to your data network</string>
 	<string name="setup_wizard_net_mobile_detail_message">To get an accurate usage figure, select and tweak the value to best describe your mobile data network capacity</string>

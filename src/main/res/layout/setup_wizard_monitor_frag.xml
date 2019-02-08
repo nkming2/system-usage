@@ -91,6 +91,18 @@
 					android:checked="true"
 					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
 					android:text="@string/setup_wizard_monitor_disk_switch" />
+
+				<androidx.appcompat.widget.SwitchCompat
+					android:id="@+id/storage_switch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/disk_switch"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="16dp"
+					app:switchPadding="16dp"
+					android:checked="true"
+					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+					android:text="@string/setup_wizard_monitor_storage_switch" />
 			</RelativeLayout>
 		</ScrollView>
 	</RelativeLayout>
