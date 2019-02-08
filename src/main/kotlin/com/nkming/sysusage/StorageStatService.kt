@@ -34,14 +34,13 @@ class StorageStatService : BaseStatService()
 		super.onCreate()
 		Log.d(LOG_TAG, "onCreate()")
 		_pref.onSharedPreferenceChangeListener =
-				SharedPreferences.OnSharedPreferenceChangeListener{ pref, key ->
-				run{
+				SharedPreferences.OnSharedPreferenceChangeListener{pref, key ->
 					if (key == getString(R.string.pref_interval_mul_key))
 					{
 						_statProvider.interval =
 								_pref.intervalMul * INTERVAL_BASE
 					}
-				}}
+				}
 		_statProvider.init(_pref.intervalMul * INTERVAL_BASE)
 	}
 

@@ -35,20 +35,18 @@ class MemStatService : BaseStatService()
 		Log.d(LOG_TAG, "onCreate()")
 		_pref.onSharedPreferenceChangeListener =
 				SharedPreferences.OnSharedPreferenceChangeListener{pref, key ->
-				run{
 					if (key == getString(R.string.pref_interval_mul_key))
 					{
 						_statProvider.interval =
 								_pref.intervalMul * INTERVAL_BASE
 					}
-				}}
+				}
 		_statProvider.init(_pref.intervalMul * INTERVAL_BASE)
 	}
 
 	private fun createMemoryStatProvider(): MemoryStatProvider
 	{
-		return MemoryStatProvider(this,
-		{
+		return MemoryStatProvider(this, {
 			val i = Intent(Res.ACTION_MEM_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)

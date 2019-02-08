@@ -39,21 +39,19 @@ class CpuStatService : BaseStatService()
 		Log.d(LOG_TAG, "onCreate()")
 		_pref.onSharedPreferenceChangeListener =
 				SharedPreferences.OnSharedPreferenceChangeListener{pref, key ->
-				run{
 					if (key == getString(R.string.pref_interval_mul_key))
 					{
 						_statProvider.interval =
 								_pref.intervalMul * INTERVAL_BASE
 					}
-				}}
+				}
 		_statProvider.init(_pref.intervalMul * INTERVAL_BASE)
 	}
 
 	private fun createCpuStatProvider(): CpuStatProvider
 	{
 		val buffer = ArrayList<CpuStat>(AVG_WINDOW)
-		return CpuStatProvider(this,
-		{
+		return CpuStatProvider(this, {
 			buffer += it
 			if (buffer.size >= AVG_WINDOW)
 			{
@@ -77,7 +75,7 @@ class CpuStatService : BaseStatService()
 	private fun getAvgStatus(buffer: List<CpuStat>): CpuStat
 	{
 		val cores = ArrayList<MutableCpuCoreStat>(buffer[0].cores.size)
-		for (i in 0..buffer[0].cores.size - 1)
+		for (i in 0 until buffer[0].cores.size)
 		{
 			cores += MutableCpuCoreStat(false, .0)
 		}

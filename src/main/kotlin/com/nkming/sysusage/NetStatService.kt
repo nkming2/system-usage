@@ -35,28 +35,28 @@ class NetStatService : BaseStatService()
 		Log.d(LOG_TAG, "onCreate()")
 		_pref.onSharedPreferenceChangeListener =
 				SharedPreferences.OnSharedPreferenceChangeListener{pref, key ->
-						when (key)
-						{
-							getString(R.string.pref_interval_mul_key) ->
-									_statProvider.interval =
-											_pref.intervalMul * INTERVAL_BASE
+					when (key)
+					{
+						getString(R.string.pref_interval_mul_key) ->
+								_statProvider.interval =
+										_pref.intervalMul * INTERVAL_BASE
 
-							getString(R.string.pref_net_mobile_dl_key) ->
-									_statProvider.mobileRxThroughput =
-											_pref.netMobileDl
+						getString(R.string.pref_net_mobile_dl_key) ->
+								_statProvider.mobileRxThroughput =
+										_pref.netMobileDl
 
-							getString(R.string.pref_net_mobile_ul_key) ->
-									_statProvider.mobileTxThroughput =
-											_pref.netMobileUl
+						getString(R.string.pref_net_mobile_ul_key) ->
+								_statProvider.mobileTxThroughput =
+										_pref.netMobileUl
 
-							getString(R.string.pref_net_wifi_dl_key) ->
-									_statProvider.wifiRxThroughput =
-											_pref.netWifiDl
+						getString(R.string.pref_net_wifi_dl_key) ->
+								_statProvider.wifiRxThroughput =
+										_pref.netWifiDl
 
-							getString(R.string.pref_net_wifi_ul_key) ->
-									_statProvider.wifiTxThroughput =
-											_pref.netWifiUl
-						}}
+						getString(R.string.pref_net_wifi_ul_key) ->
+								_statProvider.wifiTxThroughput =
+										_pref.netWifiUl
+					}}
 		_statProvider.mobileRxThroughput = _pref.netMobileDl
 		_statProvider.mobileTxThroughput = _pref.netMobileUl
 		_statProvider.wifiRxThroughput = _pref.netWifiDl
@@ -66,8 +66,7 @@ class NetStatService : BaseStatService()
 
 	private fun createNetStatProvider(): NetStatProvider
 	{
-		return NetStatProvider(this,
-		{
+		return NetStatProvider(this, {
 			val i = Intent(Res.ACTION_NET_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)

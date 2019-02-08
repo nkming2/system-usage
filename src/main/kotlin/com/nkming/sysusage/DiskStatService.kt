@@ -56,8 +56,7 @@ class DiskStatService : BaseStatService()
 
 	private fun createDiskStatProvider(): DiskStatProvider
 	{
-		return DiskStatProvider(this,
-		{
+		return DiskStatProvider(this, {
 			val i = Intent(Res.ACTION_DISK_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)
