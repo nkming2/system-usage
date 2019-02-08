@@ -88,7 +88,7 @@ class NotifService : Service(),
 		super.onDestroy()
 		Log.d(LOG_TAG, "onDestroy()")
 		stopForeground(false)
-		for (i in 0.._notifCount - 1)
+		for (i in 0 until _notifCount)
 		{
 			_notifManager.cancel(i + 1)
 		}
@@ -263,7 +263,7 @@ class NotifService : Service(),
 			if (_notifCount > notifs.size)
 			{
 				// e.g., overall stat option has changed
-				for (i in notifs.size.._notifCount - 1)
+				for (i in notifs.size until _notifCount)
 				{
 					_notifManager.cancel(i + 1)
 				}
