@@ -50,6 +50,11 @@ class MemStatService : BaseStatService()
 			val i = Intent(Res.ACTION_MEM_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)
+		}, {msg, e ->
+			Log.e("$LOG_TAG.createMemoryStatProvider", msg, e)
+			val i = Intent(Res.ACTION_MEM_STAT_AVAILABLE)
+			i.putExtra(Res.EXTRA_STAT, MemStat())
+			_broadcastManager.sendBroadcast(i)
 		})
 	}
 

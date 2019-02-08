@@ -21,12 +21,19 @@ class StorageNotifBuilder(context: Context, channelId: String)
 	fun build(stat: StorageStat, when_: Long = System.currentTimeMillis())
 			: List<Notification>
 	{
-		val products = mutableListOf<Notification>()
-		for ((i, ds) in stat.dirs.withIndex())
+		return if (!stat.isGood)
 		{
-			products += buildNotif(ds.used, ds.available, ds.size, when_ - i, (i != 0))
+			listOf(buildError(when_))
 		}
-		return products
+		else
+		{
+			val products = mutableListOf<Notification>()
+			for ((i, ds) in stat.dirs.withIndex())
+			{
+				products += buildNotif(ds.used, ds.available, ds.size, when_ - i, (i != 0))
+			}
+			products
+		}
 	}
 
 	private fun buildNotif(used: Long, avail: Long, total: Long, when_: Long,
@@ -51,19 +58,11 @@ class StorageNotifBuilder(context: Context, channelId: String)
 			throw RuntimeException("Icon not found: ic_storage_${level_}_white_24dp")
 		}
 
-		val builder = NotificationCompat.Builder(_context, _channelId)
+		val builder = getNotifBuilder(when_)
 				.setContentText(_context.getString(R.string.storage_notif_content,
 						usageGb, availGb))
 				.setProgress(100, level, false)
 				.setSmallIcon(iconId)
-				.setContentIntent(getOnClickIntent())
-				.setOnlyAlertOnce(true)
-				.setWhen(when_)
-				.setShowWhen(false)
-				.setOngoing(true)
-				.setLocalOnly(true)
-				.setColor(ContextCompat.getColor(_context, R.color.notif))
-				.setGroup(when_.toString())
 		if (isExternal)
 		{
 			builder.setContentTitle(_context.getString(R.string.storage_notif_ext_title,
@@ -74,11 +73,15 @@ class StorageNotifBuilder(context: Context, channelId: String)
 			builder.setContentTitle(_context.getString(R.string.storage_notif_title,
 					level_))
 		}
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-		{
-			builder.priority = priority
-		}
 		return builder.build()
+	}
+
+	private fun buildError(when_: Long): Notification
+	{
+		return getNotifBuilder(when_)
+				.setContentTitle(_context.getString(R.string.storage_notif_title_error))
+				.setSmallIcon(R.drawable.ic_storage_disabled_white_24dp)
+				.build()
 	}
 
 	private fun getOnClickIntent(): PendingIntent
@@ -88,6 +91,24 @@ class StorageNotifBuilder(context: Context, channelId: String)
 				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 		return PendingIntent.getActivity(_context, 0, i,
 				PendingIntent.FLAG_UPDATE_CURRENT)
+	}
+
+	private fun getNotifBuilder(when_: Long): NotificationCompat.Builder
+	{
+		val product = NotificationCompat.Builder(_context, _channelId)
+				.setContentIntent(getOnClickIntent())
+				.setOnlyAlertOnce(true)
+				.setWhen(when_)
+				.setShowWhen(false)
+				.setOngoing(true)
+				.setLocalOnly(true)
+				.setColor(ContextCompat.getColor(_context, R.color.notif))
+				.setGroup(when_.toString())
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+		{
+			product.priority = priority
+		}
+		return product as NotificationCompat.Builder
 	}
 
 	private val _context = context

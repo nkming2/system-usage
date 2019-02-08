@@ -3,7 +3,6 @@ package com.nkming.sysusage
 import android.content.Context
 import android.os.*
 import androidx.core.content.ContextCompat
-import com.nkming.utils.Log
 import java.io.File
 
 data class StorageDirStat(
@@ -64,17 +63,22 @@ data class StorageStat(
 		}
 	}
 
+	constructor() : this(listOf())
+
 	override fun describeContents() = 0
 
 	override fun writeToParcel(dest: Parcel, flags: Int)
 	{
 		dest.writeTypedList(dirs)
 	}
+
+	val isGood: Boolean
+		get() = dirs.isNotEmpty()
 }
 
 class StorageStatProvider(context: Context,
 		 onStatUpdate: ((stat: StorageStat) -> Unit)? = null,
-		 onFailure: ((msg: String) -> Unit)? = null)
+		 onFailure: ((msg: String, e: Exception?) -> Unit)? = null)
 		: BaseStatProvider()
 {
 	companion object
@@ -95,7 +99,7 @@ class StorageStatProvider(context: Context,
 						&& output.size > 1)},
 				onSuccess = {exitCode, output -> onCommandOutput(output)},
 				onFailure = {exitCode, output -> onFailure?.invoke(
-						output.joinToString("\n"))})
+						output.joinToString("\n"), null)})
 	}
 
 	private class Parser
@@ -218,10 +222,8 @@ class StorageStatProvider(context: Context,
 		}
 		catch (e: Exception)
 		{
-			Log.w("$LOG_TAG.onCommandOutput",
-					"Failed while parsing output:\n${output.joinToString("\n")}", e)
-			// Should we return something else?
-			onStatUpdate?.invoke(StorageStat(listOf(StorageDirStat(0, 0, 0))))
+			onFailure?.invoke("Failed while parsing output:\n${output.joinToString("\n")}",
+					e)
 		}
 	}
 

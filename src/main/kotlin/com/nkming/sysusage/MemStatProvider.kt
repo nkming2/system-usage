@@ -30,6 +30,8 @@ data class MemStat(
 		}
 	}
 
+	constructor() : this(0, 0, false)
+
 	override fun describeContents() = 0
 
 	override fun writeToParcel(dest: Parcel, flags: Int)
@@ -38,11 +40,14 @@ data class MemStat(
 		dest.writeLong(total)
 		dest.writeInt(if (isLow) 1 else 0)
 	}
+
+	val isGood: Boolean
+		get() = total > 0
 }
 
 class MemoryStatProvider(context: Context,
 		onStatUpdate: ((stat: MemStat) -> Unit)? = null,
-		onFailure: (() -> Unit)? = null)
+		onFailure: ((msg: String, e: Exception?) -> Unit)? = null)
 		: BaseStatProvider()
 {
 	var onStatUpdate = onStatUpdate

@@ -60,6 +60,11 @@ class DiskStatService : BaseStatService()
 			val i = Intent(Res.ACTION_DISK_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)
+		}, {msg, e ->
+			Log.e("$LOG_TAG.createDiskStatProvider", msg, e)
+			val i = Intent(Res.ACTION_DISK_STAT_AVAILABLE)
+			i.putExtra(Res.EXTRA_STAT, DiskStat())
+			_broadcastManager.sendBroadcast(i)
 		})
 	}
 

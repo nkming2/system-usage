@@ -23,13 +23,17 @@ class CpuNotifBuilder(context: Context, channelId: String)
 	fun build(stat: CpuStat, when_: Long = System.currentTimeMillis())
 			: List<Notification>
 	{
-		if (isOverall)
+		return if (!stat.isGood)
 		{
-			return listOf(buildOverall(stat, when_))
+			listOf(buildError(when_))
+		}
+		else if (isOverall)
+		{
+			listOf(buildOverall(stat, when_))
 		}
 		else
 		{
-			return buildIndividual(stat, when_)
+			buildIndividual(stat, when_)
 		}
 	}
 
@@ -132,6 +136,14 @@ class CpuNotifBuilder(context: Context, channelId: String)
 					.setSmallIcon(R.drawable.ic_cpu_disabled_white_24dp)
 					.build()
 		}
+	}
+
+	private fun buildError(when_: Long): Notification
+	{
+		return getNotifBuilder(when_)
+				.setContentTitle(_context.getString(R.string.cpu_notif_title_error))
+				.setSmallIcon(R.drawable.ic_cpu_disabled_white_24dp)
+				.build()
 	}
 
 	private fun getOnClickIntent(): PendingIntent

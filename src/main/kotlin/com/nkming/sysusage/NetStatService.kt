@@ -70,6 +70,11 @@ class NetStatService : BaseStatService()
 			val i = Intent(Res.ACTION_NET_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)
+		}, {msg, e ->
+			Log.e("$LOG_TAG.createNetStatProvider", msg, e)
+			val i = Intent(Res.ACTION_NET_STAT_AVAILABLE)
+			i.putExtra(Res.EXTRA_STAT, NetStat())
+			_broadcastManager.sendBroadcast(i)
 		})
 	}
 

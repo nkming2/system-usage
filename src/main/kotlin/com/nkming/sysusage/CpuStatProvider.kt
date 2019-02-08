@@ -71,17 +71,22 @@ data class CpuStat(
 		}
 	}
 
+	constructor() : this(listOf())
+
 	override fun describeContents() = 0
 
 	override fun writeToParcel(dest: Parcel, flags: Int)
 	{
 		dest.writeTypedList(cores)
 	}
+
+	val isGood: Boolean
+		get() = cores.isNotEmpty()
 }
 
 class CpuStatProvider(context: Context,
 		onStatUpdate: ((stat: CpuStat) -> Unit)? = null,
-		onFailure: ((msg: String) -> Unit)? = null)
+		onFailure: ((msg: String, e: Exception?) -> Unit)? = null)
 		: BaseStatProvider()
 {
 	companion object
@@ -121,7 +126,7 @@ class CpuStatProvider(context: Context,
 						&& output.size > 2)},
 				onSuccess = {_, output -> onCommandOutput(output)},
 				onFailure = {_, output -> onFailure?.invoke(output.joinToString(
-						"\n"))})
+						"\n"), null)})
 	}
 
 	protected override fun onStop()
@@ -163,9 +168,8 @@ class CpuStatProvider(context: Context,
 		}
 		catch (e: Exception)
 		{
-			Log.w("$LOG_TAG.onCommandOutput", "Failed while parsing output", e)
-			// Should we return something else?
-			onStatUpdate?.invoke(CpuStat(listOf(CpuCoreStat(true, .0))))
+			onFailure?.invoke("Failed while parsing output:\n${output.joinToString("\n")}",
+					e)
 		}
 	}
 

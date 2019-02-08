@@ -21,6 +21,18 @@ class NetNotifBuilder(context: Context, channelId: String)
 	fun build(stat: NetStat, when_: Long = System.currentTimeMillis())
 			: List<Notification>
 	{
+		return if (!stat.isGood)
+		{
+			buildError(when_)
+		}
+		else
+		{
+			buildNotif(stat, when_)
+		}
+	}
+
+	fun buildNotif(stat: NetStat, when_: Long): List<Notification>
+	{
 		val rxNotif = if (!stat.isOnline)
 		{
 			getNotifBuilder(when_)
@@ -82,6 +94,19 @@ class NetNotifBuilder(context: Context, channelId: String)
 		}
 
 		return listOf(rxNotif, txNotif)
+	}
+
+	private fun buildError(when_: Long): List<Notification>
+	{
+		val rx = getNotifBuilder(when_)
+				.setContentTitle(_context.getString(R.string.net_notif_title_error))
+				.setSmallIcon(R.drawable.ic_net_dl_disabled_white_24dp)
+				.build()
+		val tx = getNotifBuilder(when_ - 1)
+				.setContentTitle(_context.getString(R.string.net_notif_title_error))
+				.setSmallIcon(R.drawable.ic_net_ul_disabled_white_24dp)
+				.build()
+		return listOf(rx, tx)
 	}
 
 	private fun getOnClickIntent(): PendingIntent

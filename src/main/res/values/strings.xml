@@ -10,20 +10,25 @@
 	<string name="cpu_notif_content_overall" formatted="false">%d of %d cores enabled</string>
 	<string name="cpu_notif_title" formatted="false">Core %d: %d%%</string>
 	<string name="cpu_notif_title_disabled" formatted="false">Core %d disabled</string>
+	<string name="cpu_notif_title_error">Error gathering CPU stat</string>
 
 	<string name="mem_notif_title" formatted="false">Memory: %d%%</string>
 	<string name="mem_notif_content" formatted="false">%d MB in use, %d MB remaining</string>
+	<string name="mem_notif_title_error">Error gathering memory stat</string>
 
 	<string name="net_tx_notif_title" formatted="false">Outgoing: %d%%</string>
 	<string name="net_rx_notif_title" formatted="false">Incoming: %d%%</string>
 	<string name="net_notif_title_disabled" formatted="false">Network not available</string>
+	<string name="net_notif_title_error">Error gathering network stat</string>
 
 	<string name="disk_read_notif_title" formatted="false">Disk read: %d%%</string>
 	<string name="disk_write_notif_title" formatted="false">Disk write: %d%%</string>
+	<string name="disk_notif_title_error">Error gathering disk I/O stat</string>
 
 	<string name="storage_notif_title" formatted="false">Internal storage: %d%%</string>
 	<string name="storage_notif_ext_title" formatted="false">External storage: %d%%</string>
 	<string name="storage_notif_content" formatted="false">%.1f GB in use, %.1f GB remaining</string>
+	<string name="storage_notif_title_error">Error gathering storage stat</string>
 
 	<string name="notif_usage_channel_name">Usage Indicator</string>
 	<string name="notif_usage_channel_description">Show the current system usage</string>

@@ -3,14 +3,14 @@ package com.nkming.sysusage
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
-import com.nkming.utils.Log
 
 data class DiskStat(
 	// B for Byte
 	val readBps: Long,
 	val readUsage: Double,
 	val writeBps: Long,
-	val writeUsage: Double)
+	val writeUsage: Double,
+	private val _isGood: Boolean = true)
 	: Parcelable
 {
 	companion object
@@ -23,7 +23,8 @@ data class DiskStat(
 				return DiskStat(source.readLong(),
 						source.readDouble(),
 						source.readLong(),
-						source.readDouble())
+						source.readDouble(),
+						(source.readInt() != 0))
 			}
 
 			override fun newArray(size: Int): Array<DiskStat?>
@@ -33,6 +34,8 @@ data class DiskStat(
 		}
 	}
 
+	constructor() : this(0, .0, 0, .0, false)
+
 	override fun describeContents() = 0
 
 	override fun writeToParcel(dest: Parcel, flags: Int)
@@ -41,12 +44,16 @@ data class DiskStat(
 		dest.writeDouble(readUsage)
 		dest.writeLong(writeBps)
 		dest.writeDouble(writeUsage)
+		dest.writeInt(if (_isGood) 1 else 0)
 	}
+
+	val isGood: Boolean
+		get() = _isGood
 }
 
 class DiskStatProvider(context: Context,
 		onStatUpdate: ((stat: DiskStat) -> Unit)? = null,
-		onFailure: ((msg: String) -> Unit)? = null)
+		onFailure: ((msg: String, e: Exception?) -> Unit)? = null)
 		: BaseStatProvider()
 {
 	companion object
@@ -69,7 +76,7 @@ class DiskStatProvider(context: Context,
 				successWhere = {exitCode, output -> exitCode == 0},
 				onSuccess = {exitCode, output -> onCommandOutput(output)},
 				onFailure = {exitCode, output -> onFailure?.invoke(
-						output.joinToString("\n"))})
+						output.joinToString("\n"), null)})
 	}
 
 	protected override fun onStop()
@@ -160,9 +167,8 @@ class DiskStatProvider(context: Context,
 		}
 		catch (e: Exception)
 		{
-			Log.w("$LOG_TAG.onCommandOutput", "Failed while parsing output", e)
-			// Should we return something else?
-			onStatUpdate?.invoke(DiskStat(0, .0, 0, .0))
+			onFailure?.invoke("Failed while parsing output:\n${output.joinToString("\n")}",
+					e)
 		}
 	}
 

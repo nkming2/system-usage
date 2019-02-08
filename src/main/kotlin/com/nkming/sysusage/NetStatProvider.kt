@@ -12,7 +12,8 @@ data class NetStat(
 	val txBps: Long,
 	val txUsage: Double,
 	val rxBps: Long,
-	val rxUsage: Double)
+	val rxUsage: Double,
+	private val _isGood: Boolean = true)
 	: Parcelable
 {
 	companion object
@@ -36,6 +37,8 @@ data class NetStat(
 		}
 	}
 
+	constructor() : this(false, 0, .0, 0, .0, false)
+
 	override fun describeContents() = 0
 
 	override fun writeToParcel(dest: Parcel, flags: Int)
@@ -46,11 +49,14 @@ data class NetStat(
 		dest.writeLong(rxBps)
 		dest.writeDouble(rxUsage)
 	}
+
+	val isGood: Boolean
+		get() = _isGood
 }
 
 class NetStatProvider(context: Context,
 		onStatUpdate: ((stat: NetStat) -> Unit)? = null,
-		onFailure: (() -> Unit)? = null)
+		onFailure: ((msg: String, e: Exception?) -> Unit)? = null)
 		: BaseStatProvider()
 {
 	var onStatUpdate = onStatUpdate
@@ -96,6 +102,10 @@ class NetStatProvider(context: Context,
 			{
 				onStatUpdate?.invoke(NetStat(false, 0, .0, 0, .0))
 			}
+		}
+		catch (e: Exception)
+		{
+			onFailure?.invoke("Failed while gathering network stat", e)
 		}
 		finally
 		{

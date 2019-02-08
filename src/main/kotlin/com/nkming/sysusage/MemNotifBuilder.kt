@@ -22,7 +22,14 @@ class MemNotifBuilder(context: Context, channelId: String)
 	fun build(stat: MemStat, when_: Long = System.currentTimeMillis())
 			: Notification
 	{
-		return buildNotif(stat.avail, stat.total, when_)
+		return if (!stat.isGood)
+		{
+			buildError(when_)
+		}
+		else
+		{
+			buildNotif(stat.avail, stat.total, when_)
+		}
 	}
 
 	private fun buildNotif(avail: Long, total: Long, when_: Long): Notification
@@ -47,14 +54,36 @@ class MemNotifBuilder(context: Context, channelId: String)
 					"Icon not found: ic_mem_%d_white_24dp".format(Locale.US,
 							level_))
 		}
-
-		val builder = NotificationCompat.Builder(_context, _channelId)
+		return getNotifBuilder(when_)
 				.setContentTitle(_context.getString(R.string.mem_notif_title,
 						level_))
 				.setContentText(_context.getString(R.string.mem_notif_content,
 						usageMb, availMb))
 				.setProgress(100, level, false)
 				.setSmallIcon(iconId)
+				.build()
+	}
+
+	private fun buildError(when_: Long): Notification
+	{
+		return getNotifBuilder(when_)
+				.setContentTitle(_context.getString(R.string.mem_notif_title_error))
+				.setSmallIcon(R.drawable.ic_mem_disabled_white_24dp)
+				.build()
+	}
+
+	private fun getOnClickIntent(): PendingIntent
+	{
+		val i = Intent(_context, PreferenceActivity::class.java)
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+		return PendingIntent.getActivity(_context, 0, i,
+				PendingIntent.FLAG_UPDATE_CURRENT)
+	}
+
+	private fun getNotifBuilder(when_: Long): NotificationCompat.Builder
+	{
+		val product = NotificationCompat.Builder(_context, _channelId)
 				.setContentIntent(getOnClickIntent())
 				.setOnlyAlertOnce(true)
 				.setWhen(when_)
@@ -65,18 +94,9 @@ class MemNotifBuilder(context: Context, channelId: String)
 				.setGroup(when_.toString())
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
 		{
-			builder.priority = priority
+			product.priority = priority
 		}
-		return builder.build()
-	}
-
-	private fun getOnClickIntent(): PendingIntent
-	{
-		val i = Intent(_context, PreferenceActivity::class.java)
-		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-		return PendingIntent.getActivity(_context, 0, i,
-				PendingIntent.FLAG_UPDATE_CURRENT)
+		return product as NotificationCompat.Builder
 	}
 
 	private val _context = context

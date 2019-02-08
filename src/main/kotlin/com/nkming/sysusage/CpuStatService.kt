@@ -63,11 +63,13 @@ class CpuStatService : BaseStatService()
 				_broadcastManager.sendBroadcast(i)
 			}
 			_failureCount = 0
-		},
-		{
+		}, {msg, e ->
+			Log.e("$LOG_TAG.createCpuStatProvider", msg, e)
 			if (++_failureCount > FAILURE_THRESHOLD)
 			{
-				throw RuntimeException(it)
+				val i = Intent(Res.ACTION_CPU_STAT_AVAILABLE)
+				i.putExtra(Res.EXTRA_STAT, CpuStat())
+				_broadcastManager.sendBroadcast(i)
 			}
 		})
 	}

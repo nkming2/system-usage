@@ -16,9 +16,16 @@ class DiskNotifBuilder(context: Context, channelId: String)
 	fun build(stat: DiskStat, when_: Long = System.currentTimeMillis())
 			: List<Notification>
 	{
-		val readNotif = buildReadNotif(stat, when_)
-		val writeNotif = buildWriteNotif(stat, when_)
-		return listOf(readNotif, writeNotif)
+		return if (!stat.isGood)
+		{
+			buildError(when_)
+		}
+		else
+		{
+			val readNotif = buildReadNotif(stat, when_)
+			val writeNotif = buildWriteNotif(stat, when_)
+			listOf(readNotif, writeNotif)
+		}
 	}
 
 	fun buildReadNotif(stat: DiskStat, when_: Long): Notification
@@ -63,6 +70,19 @@ class DiskNotifBuilder(context: Context, channelId: String)
 				.setProgress(100, level, false)
 				.setSmallIcon(iconId)
 				.build()
+	}
+
+	private fun buildError(when_: Long): List<Notification>
+	{
+		val r = getNotifBuilder(when_)
+				.setContentTitle(_context.getString(R.string.disk_notif_title_error))
+				.setSmallIcon(R.drawable.ic_disk_read_disabled_white_24dp)
+				.build()
+		val w = getNotifBuilder(when_ - 1)
+				.setContentTitle(_context.getString(R.string.disk_notif_title_error))
+				.setSmallIcon(R.drawable.ic_disk_write_disabled_white_24dp)
+				.build()
+		return listOf(r, w)
 	}
 
 	private fun getOnClickIntent(): PendingIntent

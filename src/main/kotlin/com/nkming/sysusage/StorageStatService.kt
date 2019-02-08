@@ -52,6 +52,11 @@ class StorageStatService : BaseStatService()
 			val i = Intent(Res.ACTION_STORAGE_STAT_AVAILABLE)
 			i.putExtra(Res.EXTRA_STAT, it)
 			_broadcastManager.sendBroadcast(i)
+		}, {msg, e ->
+			Log.e("$LOG_TAG.createStorageStatProvider", msg, e)
+			val i = Intent(Res.ACTION_STORAGE_STAT_AVAILABLE)
+			i.putExtra(Res.EXTRA_STAT, StorageStat())
+			_broadcastManager.sendBroadcast(i)
 		})
 	}
 
